@@ -32,5 +32,5 @@ def CheckBearingOK(FastArray, Plate1Thickness, Plate2Thickness, maxBearingTensio
 
     if np.max(tensions1) > maxBearingTension1 or np.max(tensions2) > maxBearingTension2:
         return False
-    else
+    else:
         return True
