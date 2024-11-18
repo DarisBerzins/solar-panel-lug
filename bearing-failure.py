@@ -8,7 +8,7 @@ class FastenersClass():
         self.diameter = diameter # An array with elements [D]
     def getCg(self):
         # Returns a vector array of the form [CgX, CgY, CgZ]
-        WeightedCoords = self.coords * np.square(self.diameter)
+        WeightedCoords = self.coords * np.square(self.diameter).reshape(-1, 1)
         self.cg = np.divide(np.sum(WeightedCoords, axis=0), np.sum(np.square(self.diameter)))
         return self.cg
     def CheckBearingOK(self, thickness, maxBearingTension):
@@ -23,6 +23,8 @@ class FastenersClass():
 
 fasteners = FastenersClass(np.array(([1, 1, 1], [0, 0, 0])), np.array(([0, 0, 0],[1, 0, 0])), np.array([2, 3]))
 
+print(fasteners.getCg())
+print(fasteners.CheckBearingOK(0.1, 0.1))
 
 # def FindFastenerCg (FastArray):
 #     # Takes an array with vectors of the form [X position, Y position, Z position, Diameter, Fx, Fy, Fz]
