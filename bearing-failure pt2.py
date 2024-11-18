@@ -5,30 +5,32 @@ class FastenersClass():
         self.coords = coords
         self.force = force
         self.diameter = diameter
+        self.amount = len(self.coords)
+        self.cgCoords = np.array([0, 0, 0])
 
 
-fasteners = FastenersClass(np.array([1, 1, 1], [0, 0, 0]), np.array([0, 0, 0],[1, 0, 0]), np.array([2, 3]))
+fasteners = FastenersClass(np.array([[1, 1, 1], [0, 0, 0]]), np.array([[1, 0, 0],[0, 0, 0]]), np.array([2, 3]))
 
-
-print(fasteners.coords)
-
-F = np.array([1, 0, 0])#x, y, z as shown in figure 4.2 of the reader
-CGlocation = np.array([1, 0, 0])
-ForceLocation = np.array([0, 0, 1])
-
-Fx = F[0]
-Fz = F[2]
 
 def FindMomentArmVector(location1, vectorAtLocation1, location2):
     vectorY = location2 - location1
     projection = (np.dot(vectorY, vectorAtLocation1)/np.dot(vectorAtLocation1, vectorAtLocation1)) * vectorAtLocation1
     return projection - vectorY
 
-# def FindInPlaneForcesOnFasteners(FastenerArray, AppliedForce, ForceLocation):
-#     fastenerCG = np.array([0, 0, 0])#find cg
-#     fastenerAmount = len(FastenerArray)
-#     FastenerArray[:, 4] = AppliedForce[0]/fastenerAmount #FastenerArray: x, y, z, diameter, Fx, Fy, Fz
-#     FastenerArray[:, 6] = AppliedForce[3]/fastenerAmount
-#     momentArm = FindMomentArmVector(ForceLocation, AppliedForce, fastenerCG)
-#     My = np.cross(AppliedForce, momentArm)
-#     FastenerArray[:, 5] = (My * np.pi * )
+def FindInPlaneForcesOnFasteners(fasteners, AppliedForce, ForceLocation):
+    print(fasteners.amount)
+    print(AppliedForce[0])
+    print(np.divide(AppliedForce[0], fasteners.amount).reshape(-1, 1))
+    fasteners.force[:, 0] = np.divide(AppliedForce[0], fasteners.amount).reshape(-1, 1)
+    fasteners.force[:, 2] = np.divide(AppliedForce[2], fasteners.amount).reshape(-1, 1)
+    momentArm = FindMomentArmVector(ForceLocation, AppliedForce, fasteners.cgCoords)
+    My = np.cross(AppliedForce, momentArm)
+    total = 0
+    for i in range(fasteners.amount):
+        total += np.pi * np.square(fasteners.diameter[i]/2) * np.square(np.linalg.norm(fasteners.coords[i] - fasteners.cgCoords))
+    for i in range(fasteners.amount):
+        fasteners.force[i, 1] = np.divide(np.linalg.norm(My) * np.pi * np.square(fasteners.diameter[i]/2) * np.linalg.norm(fasteners.coords[i] - fasteners.cgCoords), total)
+
+
+FindInPlaneForcesOnFasteners(fasteners, np.array([1, 0, 0]), np.array([1, 0, 1]))
+print(fasteners.force)
