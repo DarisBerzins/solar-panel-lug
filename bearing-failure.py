@@ -1,7 +1,15 @@
 #this is going to calculate whether bearing failure!!!
 import numpy as np
 
-print("hello world")
+class FastenersClass():
+    def __init__(self, coords, force, diameter):
+        self.coords = coords
+        self.force = force
+        self.diameter = diameter
+
+
+fasteners = FastenersClass(np.array([1, 1, 1], [0, 0, 0]), np.array([0, 0, 0],[1, 0, 0]), np.array([2, 3]))
+
 
 def FindFastenerCg (FastArray):
     # Takes an array with vectors of the form [X position, Y position, Z position, Diameter, Fx, Fy, Fz]
