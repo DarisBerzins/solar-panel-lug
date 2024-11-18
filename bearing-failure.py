@@ -4,7 +4,7 @@ import numpy as np
 print("hello world")
 
 def FindFastenerCg (FastArray):
-    # Takes an array with vectors of the form [X position, Y position, Z position, Diameter]
+    # Takes an array with vectors of the form [X position, Y position, Z position, Diameter, Fx, Fy, Fz]
     # Returns a vector of the form [CgX, CgY]
 
     # Multiply the position values times their area
@@ -23,3 +23,8 @@ def FindFastenerCg (FastArray):
     CgZ = np.sum(FastArray[:, 2] / total_area)
 
     return np.array([CgX, CgY, CgZ])
+
+def CheckBearingOK(FastArray, Plate1Thickness, Plate2Thickness, maxBearingTension1, maxBearingTension2):
+    # Takes an array with vectors of the form [X position, Y position, Z position, Diameter, Fx, Fy, Fz], the plate thickness and the allowable bearing strengths
+    # Returns True if everything is indeed ok (no bearing failure), returns false if not ok (Sad fastener noises)
+
