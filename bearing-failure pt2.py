@@ -2,25 +2,25 @@ import numpy as np
 
 class FastenersClass():
     def __init__(self, coords, force, diameter):
-        self.coords = coords
-        self.force = force
-        self.diameter = diameter
-        self.amount = len(self.coords)
-        self.cgCoords = np.array([0, 0, 0])
+        '''Creates element containing parameters for all fasteners.'''
+        self.coords = coords #numpy vector - [x, y, z]
+        self.force = force #numpy vector = [x, y, z]
+        self.diameter = diameter #float value in meters
+        self.amount = len(self.coords) #find amount of fasteners
+        self.cgCoords = np.array([0, 0, 0])#this is found in the other code
 
 
 fasteners = FastenersClass(np.array([[1, 1, 1], [0, 0, 0]], dtype=float), np.array([[0, 0, 0],[0, 0, 0]], dtype=float), np.array([2, 3], dtype=float))
 
 
 def FindMomentArmVector(location1, vectorAtLocation1, location2):
-    vectorY = location2 - location1
-    projection = (np.dot(vectorY, vectorAtLocation1)/np.dot(vectorAtLocation1, vectorAtLocation1)) * vectorAtLocation1
-    return projection - vectorY
+    '''Finds moment arm vector from location2 to vector passing through location1'''
+    vectorY = location2 - location1#vector y in orthogonal projection
+    projection = (np.dot(vectorY, vectorAtLocation1)/np.dot(vectorAtLocation1, vectorAtLocation1)) * vectorAtLocation1#orthogonal projection
+    return projection - vectorY#return difference between orthogonal projection and vector y
 
 def FindInPlaneForcesOnFasteners(fasteners, AppliedForce, ForceLocation):
-    print(fasteners.amount)
-    print(AppliedForce[0])
-    print(np.full((fasteners.amount), np.divide(AppliedForce[0], fasteners.amount)))
+    '''Finds in-plane forces for a provided set of fastener locations based on an applied force at a location'''
     fasteners.force = np.zeros((fasteners.amount, 3))
     fasteners.force[:, 0] += np.full((fasteners.amount), np.divide(AppliedForce[0], fasteners.amount))
     fasteners.force[:, 2] += np.full((fasteners.amount), np.divide(AppliedForce[2], fasteners.amount))
