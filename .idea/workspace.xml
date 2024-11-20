@@ -5,9 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2226323e-9950-46ee-abb9-697d40b0fc41" name="Changes" comment="Started CheckBearingOk function">
-      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bearing-failure.py" beforeDir="false" afterPath="$PROJECT_DIR$/bearing-failure.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bearing-failure pt2.py" beforeDir="false" afterPath="$PROJECT_DIR$/bearing-failure pt2.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,7 +71,7 @@
       <updated>1731936805293</updated>
       <workItem from="1731936806816" duration="2398000" />
       <workItem from="1731939255250" duration="8648000" />
-      <workItem from="1732108176133" duration="919000" />
+      <workItem from="1732108176133" duration="2151000" />
     </task>
     <task id="LOCAL-00001" summary="FindFastenerCg function is finished!">
       <option name="closed" value="true" />
@@ -119,7 +118,7 @@
     <option name="LAST_COMMIT_MESSAGE" value="Started CheckBearingOk function" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/solar_panel_lug$bearing_failure_pt2.coverage" NAME="bearing-failure pt2 Coverage Results" MODIFIED="1732108343077" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/solar_panel_lug$bearing_failure_pt2.coverage" NAME="bearing-failure pt2 Coverage Results" MODIFIED="1732110589063" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/solar_panel_lug$bearing_failure.coverage" NAME="bearing-failure Coverage Results" MODIFIED="1732108414979" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
