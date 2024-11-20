@@ -26,6 +26,7 @@ class FastenersClass():
         
     def FindInPlaneForces(self, AppliedForce, ForceLocation, AppliedMomentVector):
         '''Finds in-plane forces for a provided set of fastener locations based on an applied force at a location'''
+        self.cg = self.getCg()
         self.force = np.zeros((self.amount, 3))#set forces to zero as they are added to later
         self.force[:, 0] += np.full((self.amount), np.divide(AppliedForce[0], self.amount))#add forces in x-direction based on eqn. 4.2 from the reader
         self.force[:, 2] += np.full((self.amount), np.divide(AppliedForce[2], self.amount))#add forces in z-direction based on eqn. 4.3 from the reader
