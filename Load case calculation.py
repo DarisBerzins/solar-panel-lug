@@ -6,7 +6,7 @@ weight= (4.515+1)*9.81 #[N]
 L_cm = 0.9573 #[m]
 g=9.81 #[m/s^2]
 F_thruster=511
-
+#<3
 
 #sum of forces in x
 R_x=-lat*g #[N]
