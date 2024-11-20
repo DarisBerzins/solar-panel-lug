@@ -12,7 +12,7 @@ class FastenersClass():
         self.cg = np.divide(np.sum(WeightedCoords, axis=0), np.sum(np.square(self.diameter)))
         return self.cg
     def CheckBearingOK(self, thickness, maxBearingTension):
-        # Returns True if everything is indeed ok (no bearing failure), returns false if not ok (Sad fastener noises)
+        # Returns True if everything is indeed ok (no bearing failure), returns False if not ok (Sad fastener noises)
         # WARNING: ASSUMES WE ARE FASTENING ALIGNED WITH THE XZ PLANE
         maxAllowableForceperD = maxBearingTension * thickness
         tensions = np.divide(np.sqrt(np.square(self.force[:, 0]) + np.square(self.force[:,2])), self.diameter)
