@@ -1,4 +1,5 @@
 #this is going to calculate whether bearing failure!!!
+# 4.5 - 4.7
 import numpy as np
 
 class FastenersClass():
