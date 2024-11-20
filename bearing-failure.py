@@ -2,15 +2,18 @@
 import numpy as np
 
 class FastenersClass():
-    def __init__(self, coords, force, diameter):
+    def __init__(self, coords, diameter):
         self.coords = coords # An array with vectors of the form [X, Y, Z]
-        self.force = force # An array with vectors of the form [Fx, Fy, Fz]
         self.diameter = diameter # An array with elements [D]
+        self.amount = len(self.coords)
+        self.cg = self.getCg()
+
     def getCg(self):
         # Returns a vector array of the form [CgX, CgY, CgZ]
         WeightedCoords = self.coords * np.square(self.diameter).reshape(-1, 1)
         self.cg = np.divide(np.sum(WeightedCoords, axis=0), np.sum(np.square(self.diameter)))
         return self.cg
+    
     def CheckBearingOK(self, thickness, maxBearingTension):
         # Returns True if everything is indeed ok (no bearing failure), returns False if not ok (Sad fastener noises)
         # WARNING: ASSUMES WE ARE FASTENING ALIGNED WITH THE XZ PLANE
@@ -20,6 +23,26 @@ class FastenersClass():
             return False
         else:
             return True
+        
+    def FindInPlaneForces(self, AppliedForce, ForceLocation, AppliedMomentVector):
+        '''Finds in-plane forces for a provided set of fastener locations based on an applied force at a location'''
+        self.force = np.zeros((self.amount, 3))#set forces to zero as they are added to later
+        self.force[:, 0] += np.full((self.amount), np.divide(AppliedForce[0], self.amount))#add forces in x-direction based on eqn. 4.2 from the reader
+        self.force[:, 2] += np.full((self.amount), np.divide(AppliedForce[2], self.amount))#add forces in z-direction based on eqn. 4.3 from the reader
+        momentArm = FindMomentArmVector(ForceLocation, AppliedForce, self.cg)#finds moment arm to balance force about cg
+        My = np.cross(AppliedForce, momentArm) + AppliedMomentVector[2] # Calculate moment in the y direction using the contribution from the force vector and the y component of M
+        total = 0#summation of areas times distance from cg^2
+        for i in range(self.amount):#perform summation
+            total += np.pi * np.square(self.diameter[i]/2) * np.square(np.linalg.norm(self.coords[i] - self.cg))
+        for i in range(self.amount):#assign each fastener a different force in y-direction based on its distance from cg
+            self.force[i, 1] = np.divide(np.linalg.norm(My) * np.pi * np.square(self.diameter[i]/2) * np.linalg.norm(self.coords[i] - self.cg), total)
+        return self.force
+
+def FindMomentArmVector(location1, vectorAtLocation1, location2):
+    '''Finds moment arm vector from location2 to vector passing through location1'''
+    vectorY = location2 - location1#vector y in orthogonal projection
+    projection = (np.dot(vectorY, vectorAtLocation1)/np.dot(vectorAtLocation1, vectorAtLocation1)) * vectorAtLocation1#orthogonal projection
+    return projection - vectorY#return difference between orthogonal projection and vector y
 
 fasteners = FastenersClass(np.array(([1, 1, 1], [0, 0, 0])), np.array(([0, 0, 0],[1, 0, 0])), np.array([2, 3]))
 
