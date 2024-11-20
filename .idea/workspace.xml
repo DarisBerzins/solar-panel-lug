@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="2226323e-9950-46ee-abb9-697d40b0fc41" name="Changes" comment="Started CheckBearingOk function">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bearing-failure pt2.py" beforeDir="false" afterPath="$PROJECT_DIR$/bearing-failure pt2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,7 +71,7 @@
       <updated>1731936805293</updated>
       <workItem from="1731936806816" duration="2398000" />
       <workItem from="1731939255250" duration="8648000" />
-      <workItem from="1732108176133" duration="2151000" />
+      <workItem from="1732108176133" duration="5071000" />
     </task>
     <task id="LOCAL-00001" summary="FindFastenerCg function is finished!">
       <option name="closed" value="true" />
