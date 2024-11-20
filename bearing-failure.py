@@ -26,6 +26,8 @@ fasteners = FastenersClass(np.array(([1, 1, 1], [0, 0, 0])), np.array(([0, 0, 0]
 print(fasteners.getCg())
 print(fasteners.CheckBearingOK(0.1, 0.1))
 
+#balls
+
 # def FindFastenerCg (FastArray):
 #     # Takes an array with vectors of the form [X position, Y position, Z position, Diameter, Fx, Fy, Fz]
 #     # Returns a vector of the form [CgX, CgY, CgZ]
