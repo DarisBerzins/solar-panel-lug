@@ -1,6 +1,7 @@
+#4.1-4.2
 import numpy as np
-lat = 0.5 #[g]
-lon = 5 #[g]
+lat = 2 #[g]
+lon = 3.5 #[g]
 weight= (4.515+1)*9.81 #[N]
 L_cm = 0.9573 #[m]
 g=9.81 #[m/s^2]
