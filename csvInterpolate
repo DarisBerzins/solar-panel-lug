@@ -1,0 +1,7 @@
+import numpy as np
+
+def getInterpolatedValue(csvFile, input):
+    data = np.getfromtxt(csvFile , delimiter=' ')
+    return np.interp(input, data[:, 0], data[:, 1])
+
+
