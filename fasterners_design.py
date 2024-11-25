@@ -10,8 +10,29 @@ def fasteners_amount (w, D2, x): # x is number between 2 and 3
 # spacing center-to-center between fasteners
 
 def fasteners_spacing (w, D2, number_fastener):
-    fastener_spacing=  (w-3*D2)/number_fastener
-    return fastener_spacing
+    fastener_space =  (w-3*D2)/(number_fastener-1)
+    return fastener_space
+# spacing check with the condition mentioned in reader
+
+def spacing_check (w, D2, x):
+    while True:
+        # calculate number of fasterners
+        number_fastener = fasteners_amount(w, D2, x)
+        # Calculate spacing
+        fastener_space = fasteners_spacing(w, D2, number_fastener)
+        # calculating x
+        x=fastener_space/D2
+        
+        if 2<=x<=3:
+            return number_fastener, fastener_space
+        elif x<2:
+            x=2
+            # change fastener_space up or D2 down
+        else:
+            x=3
+            # change fastener_space down or D2 up
+    return
+        
 
 # distance between edge of the plate and nearest fastener 
 
