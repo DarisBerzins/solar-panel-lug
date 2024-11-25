@@ -16,26 +16,24 @@ class FastenersClass():
         self.cg = np.divide(np.sum(WeightedCoords, axis=0), np.sum(np.square(self.diameter)))
         return self.cg
     
-    def CheckBearingOK(self, thickness, maxBearingTension):
-        # Returns True if everything is indeed ok (no bearing failure), returns False if not ok (Sad fastener noises)
+    def CheckBearingOK(self, thickness, maxBearingTension, AppliedForce, ForceLocation, AppliedMomentVector):
+        '''returns safety factor'''
         # WARNING: ASSUMES WE ARE FASTENING ALIGNED WITH THE XZ PLANE
+        self.FindInPlaneForces(AppliedForce, ForceLocation, AppliedMomentVector)
         maxAllowableForceperD = maxBearingTension * thickness
         tensions = np.divide(np.sqrt(np.square(self.force[:, 0]) + np.square(self.force[:,2])), self.diameter)
-        if np.max(tensions) > maxAllowableForceperD:
-            return False
-        else:
-            return True
-        
-    def CheckBearingOKThermalEdition(self, thickness, maxBearingTension, thermalForce):
+        maxAllowableForce = np.multiply(maxAllowableForceperD, self.diameter)
+        return np.min(np.divide(maxAllowableForce, tensions))-1
+
+    def CheckBearingOKThermalEdition(self, thickness, maxBearingTension, thermalForce, AppliedForce, ForceLocation, AppliedMomentVector):
         # Returns True if everything is indeed ok (no bearing failure), returns False if not ok (Sad fastener noises)
         # WARNING: ASSUMES WE ARE FASTENING ALIGNED WITH THE XZ PLANE
+        self.FindInPlaneForces(AppliedForce, ForceLocation, AppliedMomentVector)
         maxAllowableForceperD = maxBearingTension * thickness
         tensions = np.divide(thermalForce + np.sqrt(np.square(self.force[:, 0]) + np.square(self.force[:,2])), self.diameter)
-        if np.max(tensions) > maxAllowableForceperD:
-            return False
-        else:
-            return True
-        
+        maxAllowableForce = np.multiply(maxAllowableForceperD, self.diameter)
+        return np.min(np.divide(maxAllowableForce, tensions)) - 1
+
     def FindInPlaneForces(self, AppliedForce, ForceLocation, AppliedMomentVector):
         '''Finds in-plane forces for a provided set of fastener locations based on an applied force at a location'''
         self.cg = self.getCg()
@@ -60,7 +58,7 @@ def FindMomentArmVector(location1, vectorAtLocation1, location2):
 fasteners = FastenersClass(np.array(([1, 1, 1], [0, 0, 0])), np.array([2, 3]))
 
 print(fasteners.getCg())
-print(fasteners.CheckBearingOK(0.1, 0.1))
+print(fasteners.CheckBearingOK(0.1, 0.1, np.array(([1.0,1.0,1.0])), np.array(([1.0,1.0,1.0])), np.array(([1.0,1.0,1.0]))))
 
 #balls
 
