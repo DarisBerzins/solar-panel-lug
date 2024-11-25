@@ -7,6 +7,7 @@ class FastenersClass():
         self.coords = coords # An array with vectors of the form [X, Y, Z]
         self.diameter = diameter # An array with elements [D]
         self.amount = len(self.coords)
+        self.force = np.zeros((self.amount, 3))
         self.cg = self.getCg()
 
     def getCg(self):
@@ -56,7 +57,7 @@ def FindMomentArmVector(location1, vectorAtLocation1, location2):
     projection = (np.dot(vectorY, vectorAtLocation1)/np.dot(vectorAtLocation1, vectorAtLocation1)) * vectorAtLocation1#orthogonal projection
     return projection - vectorY#return difference between orthogonal projection and vector y
 
-fasteners = FastenersClass(np.array(([1, 1, 1], [0, 0, 0])), np.array(([0, 0, 0],[1, 0, 0])), np.array([2, 3]))
+fasteners = FastenersClass(np.array(([1, 1, 1], [0, 0, 0])), np.array([2, 3]))
 
 print(fasteners.getCg())
 print(fasteners.CheckBearingOK(0.1, 0.1))
