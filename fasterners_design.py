@@ -26,11 +26,9 @@ def spacing_check (w, D2, x):
         if 2<=x<=3:
             return number_fastener, fastener_space
         elif x<2:
-            x=2
-            # change fastener_space up or D2 down
+            x+=0.01
         else:
-            x=3
-            # change fastener_space down or D2 up
+            x-=0.01
     return
         
 
