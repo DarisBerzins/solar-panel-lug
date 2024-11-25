@@ -25,6 +25,16 @@ class FastenersClass():
         else:
             return True
         
+    def CheckBearingOKThermalEdition(self, thickness, maxBearingTension, thermalForce):
+        # Returns True if everything is indeed ok (no bearing failure), returns False if not ok (Sad fastener noises)
+        # WARNING: ASSUMES WE ARE FASTENING ALIGNED WITH THE XZ PLANE
+        maxAllowableForceperD = maxBearingTension * thickness
+        tensions = np.divide(thermalForce + np.sqrt(np.square(self.force[:, 0]) + np.square(self.force[:,2])), self.diameter)
+        if np.max(tensions) > maxAllowableForceperD:
+            return False
+        else:
+            return True
+        
     def FindInPlaneForces(self, AppliedForce, ForceLocation, AppliedMomentVector):
         '''Finds in-plane forces for a provided set of fastener locations based on an applied force at a location'''
         self.cg = self.getCg()
