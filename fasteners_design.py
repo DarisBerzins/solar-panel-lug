@@ -14,7 +14,8 @@ def fasteners_spacing (w, D2, number_fastener):
     return fastener_space
 # spacing check with the condition mentioned in reader
 
-def spacing_check (w, D2, x):
+def spacing_check (w, D2):
+    x = 2.5
     # calculate number of fasterners
     number_fastener = fasteners_amount(w, D2, x)
     # Calculate spacing
@@ -47,10 +48,9 @@ def edge_distance (D2):
 
 w = 100  # Width of the plate
 D2 = 10  # Diameter or parameter value
-x = 2.3  # Initial value for spacing factor
 
 # Calculate the number of fasteners and spacing
-number_fastener, fastener_space = spacing_check(w, D2, x)
+number_fastener, fastener_space = spacing_check(w, D2)
 
 # Calculate the edge distances
 e1, e2 = edge_distance(D2)
