@@ -21,3 +21,12 @@ def TestForBearingIncludingThermalStress(AppliedForce, ForceLocation, AppliedMom
     fasteners.FindInPlaneForces(AppliedForce, ForceLocation, AppliedMomentVector)
     ok = fasteners.CheckBearingOKThermalEdition(Plate1Thickness, Plate1BearingStrength, thermalLoad1) and fasteners.CheckBearingOKThermalEdition(Plate2Thickness, Plate2BearingStrength, thermalLoad2)
     return ok
+
+
+#iteration loop
+while True:
+    #select and design lug
+    #fastener pattern
+    print("Bearing Check: ", TestForBearing(AppliedForce, ForceLocation, AppliedMomentVector, Plate1Thickness, Plate2Thickness, Plate1BearingStrength, Plate2BearingStrength))
+    print("Bearing Check Incl Thermal Stress: ", TestForBearingIncludingThermalStress(AppliedForce, ForceLocation, AppliedMomentVector, Plate1Thickness, Plate2Thickness, Plate1BearingStrength, Plate2BearingStrength, alphaFastener, alphaPlate1, alphaPlate2, fastenerElasticModulus, fastenerStiffnessArea, jointForceRatio))
+    #all the other failure modes
