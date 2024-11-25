@@ -1,9 +1,16 @@
-import numpy
+import numpy as np
 
 maxSolarPanelTemperature = 383.15#in Kelvins
 minSolarPanelTemperature = 168.15#in Kelvins
 
 assemblyReferenceTemperature = 288.15#in Kelvins
+
+def FindAttachedPartCompliance(thickness, Emoda, D_f0, D_fi):
+    return ( 4*thickness ) / ( Emoda * np.pi * ( D_f0**2 - D_fi**2 ) )
+
+def FindFastenerCompliance(Emodb, SubsL, SubsA):
+    '''Takes a young modulus and two lists with segment lengths and segment areas, returns fastener compliance duh'''
+    return (1/Emodb) * np.sum(np.divide(SubsL, SubsA))
 
 alphaFastener = 1
 alphaLug = 1
