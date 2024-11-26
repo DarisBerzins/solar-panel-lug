@@ -12,49 +12,32 @@ def fasteners_amount (w, D2, x): # x is number between 2 and 3
 def fasteners_spacing (w, D2, number_fastener):
     fastener_space =  (w-3*D2)/(number_fastener-1)
     return fastener_space
-# spacing check with the condition mentioned in reader
 
-def spacing_check (w, D2):
-    x = 2.5
-    # calculate number of fasterners
-    number_fastener = fasteners_amount(w, D2, x)
-    # Calculate spacing
-    fastener_space = fasteners_spacing(w, D2, number_fastener)
-    x=fastener_space/D2
+# spacing check with the condition mentioned in reader 2-3xD2.
+
+def spacing_check (w, D2, x):
     while True:
         # calculate number of fasterners
         number_fastener = fasteners_amount(w, D2, x)
         # Calculate spacing
         fastener_space = fasteners_spacing(w, D2, number_fastener)
         # calculating x
+        spacing_factor=fastener_space/D2
         print(x)
-        
-        if 2<=x<=3:
+        print(spacing_factor)
+        if 2<=spacing_factor<=3:
             return number_fastener, fastener_space
-        elif x<2:
-            
-            x+=0.01
-        else:
-            x-=0.01
-    return
+        x+=0.1
         
-
 # distance between edge of the plate and nearest fastener 
 
 def edge_distance (D2):
     e1=1.5*D2
     e2=1.5*D2
     return e1, e2
+w=200
+D2=10
+x=2
+print(spacing_check(w, D2, x))
+print()
 
-w = 100  # Width of the plate
-D2 = 10  # Diameter or parameter value
-
-# Calculate the number of fasteners and spacing
-number_fastener, fastener_space = spacing_check(w, D2)
-
-# Calculate the edge distances
-e1, e2 = edge_distance(D2)
-
-print(f"Number of fasteners: {number_fastener}")
-print(f"Spacing between fasteners: {fastener_space}")
-print(f"Edge distances: e1 = {e1}, e2 = {e2}")
