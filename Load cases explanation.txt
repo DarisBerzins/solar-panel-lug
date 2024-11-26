@@ -1,0 +1,20 @@
+Mass of solar panel: m_sp=5.515kg
+Length from center of mass to lug: L=0.9573m 
+Mass spacecraft: m_s/c=973.97kg
+Main thruster force: F_t=511N
+
+During launch:
+Lateral (x/y) and Axial (z) coordinates are given in brackets (x/y, z) respectively.
+It is assumed that lateral loads act both in the x and y direction.
+1. (0.5, 6)
+2. (-0.5, 6)
+3. (-2, 3.5)
+4. (-2, -1.5)
+5. (-0.5, -2)
+6. (0.5, -2)
+7. (2, -1.5)
+8. (2, 3.5)
+9. Main thruster load case
+10. Maneuvering load case
+
+
