@@ -20,7 +20,7 @@ class FastenersClass():
         '''returns safety factor'''
         # WARNING: ASSUMES WE ARE FASTENING ALIGNED WITH THE XZ PLANE
         self.FindInPlaneForces(AppliedForce, ForceLocation, AppliedMomentVector)
-        maxAllowableForceperD = maxBearingTensio    n * thickness
+        maxAllowableForceperD = maxBearingTension * thickness
         tensions = np.divide(np.sqrt(np.square(self.force[:, 0]) + np.square(self.force[:,2])), self.diameter)
         maxAllowableForce = np.multiply(maxAllowableForceperD, self.diameter)
         return np.min(np.divide(maxAllowableForce, tensions))-1
