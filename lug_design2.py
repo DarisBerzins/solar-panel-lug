@@ -1,5 +1,5 @@
 import numpy as np
-import time
+
 
 # Calculation of the total force
 def get_P(F1, Fy, Fz):  # vectors
@@ -18,7 +18,7 @@ def Area_Aav(w, D, t):
 
 
 def compute_Kt_material1(WD):
-    # Data points for W/D and Kt
+    # Data points for W/D and Kt Curve 4 graph 1
     data_points = [
         (1, 1),
         (1.5, 0.96),
@@ -49,7 +49,6 @@ def compute_Kt_material1(WD):
         if WD_i <= WD <= WD_next:
             # Linear interpolation formula
             return Kt_i + (Kt_next - Kt_i) / (WD_next - WD_i) * (WD - WD_i)
-            # return 0.9
     # If WD is outside the range, return None (this shouldn't happen with edge cases handled)
     return None
 
@@ -216,38 +215,33 @@ load_cases = [
     {"case": 10, "deployment": "Main thruster", "Fx": -2.899347 * np.array([1, 0, 0]), "Fy": np.array([0, 0, 0]), "Fz": np.array([0, 0, 0]), "F1": np.array([0, 0, 0])},
 ]
 '''
-# these still have to be decided
-SF = SF_yield = SF_bearing = 1.25  #
-
 # for the chosen loadcase
 # Newtons
+Fx = np.array([27.05, 0, 0])
+Fy = np.array([0, 27.05, 0])
+Fz = np.array([0, 0, -324.6])
+F1 = np.array([0, 0, 0])
 
-
-Fx = np.multiply(np.array([27.05, 0, 0]), SF)
-Fy = np.multiply(np.array([0, 27.05, 0]), SF)
-Fz = np.multiply(np.array([0, 0, -324.6]), SF)
-F1 = np.multiply(np.array([0, 0, 0]), SF)
-
-P = get_P(F1, Fy, Fz)
-# *0.225
+P = get_P(F1, Fy, Fz) * 0.225
 P_axial = np.dot(P, [0, 1, 0])
 P_transverse = np.dot(P, [0, 0, 1])
 
-materials = [
-    {"number": 1, "name": "Aluminum 7075", "Ftu": 524 * (10 ** 6)  # Pa
-     # *145.038
-     },
-    {"number": 2, "name": "Aluminum 2024-T4", "Ftu": 469 * (10 ** 6)  # Pa
-     # *145.038
-
-     }]
-'''
-materials = [
-    {"number":1, "name": "Aluminum 7075", "Ftu": 524*145.038#Psi
+'''materials = [
+    {"number":1, "name": "Aluminum 7075", "Ftu": 524*(10**6)#Pa
+    #*145.038
     },
-    {"number":2, "name": "Aluminum 2024-T4", "Ftu": 469*145.038#Psi
+    {"number":2, "name": "Aluminum 2024-T4", "Ftu": 469*(10**6)#Pa
+    #*145.038
+
     }]
 '''
+materials = [
+    {"number": 1, "name": "Aluminum 7075", "Ftu": 524 * 145.038  # Psi
+     },
+    {"number": 2, "name": "Aluminum 2024-T4", "Ftu": 469 * 145.038  # Psi
+     }]
+# these still have to be decided
+SF = SF_yield = SF_bearing = 1.25  #
 
 
 # Initialize geometrical parameters
@@ -260,8 +254,6 @@ materials = [
 def calculate_R_values(material, D1, t1, w):
     Ftu = material["Ftu"]
 
-    if D1 >= w:
-        return 42, 69
     At = (w - D1) * t1  # Axial area
     Abr = D1 * t1  # Bearing area
     Aav = Area_Aav(w, D1, t1)
@@ -283,42 +275,20 @@ def calculate_R_values(material, D1, t1, w):
     Rtr = P_transverse / Ptu
     return Ra, Rtr
 
-best_deviation = [10000, None, None, None]
 
 for material in materials:
-    for D1 in np.arange(0.0005, 0.5, 0.001): # meters
-        for i in range(100):
-            print("-", end = ""),
-        print()
-        print("X", end = ""),
-        for i in range(int(100*(D1.item()/0.5))):
-            print("X", end = ""),
-        print()
-        for i in range(100):
-            print("-", end = ""),
-        print()
-        print("Material: " + str(material["number"]))
-        print("Progress: " + str((D1.item()/0.5)*100) + "%")
-        print("Best fit: " + str(best_deviation[0]))
-        print()
-        print("Best w, t1, D1: " + str(best_deviation[1]) + ',' + str(best_deviation[2]) + ',' + str(best_deviation[3]))
-        print()
-        print("Trying D = " + str(D1))
-        print()
-        for t1 in np.arange(0.001, 0.5, 0.001):
-            # print(D1, t1)
-            for w in np.arange(D1, 0.5, 0.001):  # w> t1 >e (doesn't) affect the weight> D ( a higher value affect the weight positivily), therefore check e at the end
-                Ra, Rtr = calculate_R_values(material, D1, t1, w)
-                # print(Ra, Rtr)
+    for D1 in np.arange(0.005, 0.5, 0.001):  # meters
+        for t1 in np.arange(0.005, 0.5, 0.001):
+            for w in np.arange(0.01, 0.5,
+                               0.001):  # w> t1 >e (doesn't) affect the weight> D ( a higher value affect the weight positivily), therefore check e at the end
+                Ra, Rtr = calculate_R_values(material, D1 * 39.37, t1 * 39.37, w * 39.37)
+                # Ra,Rtr=calculate_R_values(material,D1,t1,w)
+                print(Ra, Rtr)
                 # print(Ra,Rtr)
                 # print(np.pow(Ra,1.6),np.pow(abs(Rtr),1.6))
                 deviation = 1 - (np.pow(Ra, 1.6) + np.pow(abs(Rtr), 1.6))
-                # print(deviation)
-                if deviation < best_deviation[0] and deviation > 0:
-                    best_deviation = [deviation, w, t1, D1, material["number"]]
-                    # print(best_deviation)
-                    # time.sleep(1)
-                # if deviation < 0.5 and deviation > 0:
-                #     print(material["name"], D1, t1, w)
+                print(deviation)
+                if deviation < 0.5 and deviation > 0:
+                    print(material["name"], D1, t1, w, e)
 
 # Output the best design '''
