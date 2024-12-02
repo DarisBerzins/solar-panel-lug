@@ -18,19 +18,20 @@ def fasteners_spacing (w, D2, number_fastener):
 
 def optimum_configuration (w, D2, x):
 
-    while True:
+    while x<=3:
         # calculate number of fasterners
         number_fastener = fasteners_amount(w, D2, x)
         #print(number_fastener)
         # Calculate spacing
         fastener_space = fasteners_spacing(w, D2, number_fastener)
+        #print(fastener_space)
         # calculating x
         spacing_factor=fastener_space/D2
         #print(x)
         #print(spacing_factor)
-        if 2<=spacing_factor<=3 or x==3:
+        if 2<=spacing_factor<=3:
             return number_fastener, fastener_space
-        x+=0.1
+        x+=0.01
 
 # distance between edge of the plate and nearest fastener 
 
@@ -40,8 +41,7 @@ def edge_distance (D2):
     return e1, e2
 
 
-
-w=300
-D2=25
-x_initial=2
+w=38.0
+D2=7.5
+x_initial=2.0
 print(optimum_configuration(w, D2, x_initial))
