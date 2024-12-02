@@ -58,7 +58,7 @@ def FindMomentArmVector(location1, vectorAtLocation1, location2):
 fasteners = FastenersClass(np.array(([1, 1, 1], [0, 0, 0])), np.array([2, 3]))
 
 print(fasteners.getCg())
-print(fasteners.CheckBearingOK(0.1, 0.1, np.array(([1.0,1.0,1.0])), np.array(([1.0,1.0,1.0])), np.array(([1.0,1.0,1.0]))))
+print(fasteners.CheckBearingOK(0.1, 2, np.array(([1.0,1.0,1.0])), np.array(([1.0,1.0,1.0])), np.array(([1.0,1.0,1.0]))))
 
 #balls
 
