@@ -5,6 +5,8 @@ minSolarPanelTemperature = 168.15#in Kelvins
 
 assemblyReferenceTemperature = 288.15#in Kelvins
 
+E_a = 73.4 * 10e9 #Pa
+
 def FindAttachedPartCompliance(thickness, Emoda, D_f0, D_fi): #apply formula to calcuate compliance of part
     return ( 4*thickness ) / ( Emoda * np.pi * ( D_f0**2 - D_fi**2 ) )
 
