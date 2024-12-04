@@ -5,7 +5,7 @@ minSolarPanelTemperature = 168.15#in Kelvins
 
 assemblyReferenceTemperature = 288.15#in Kelvins
 
-def FindAttachedPartCompliance(thickness, Emoda, D_f0, D_fi):
+def FindAttachedPartCompliance(thickness, Emoda, D_f0, D_fi): #apply formula to calcuate compliance of part
     return ( 4*thickness ) / ( Emoda * np.pi * ( D_f0**2 - D_fi**2 ) )
 
 def FindFastenerCompliance(Emodb, SubsL, SubsA):
@@ -21,6 +21,6 @@ forceRatio = attachedPartCompliance/(attachedPartCompliance + fastenerCompliance
 
 
 
-def FindThermalLoad(alphaFastener, alphaClampedPart, deltaT, fastenerElasticModulus, fastenerStiffnessArea, jointForceRatio):
+def FindThermalLoad(alphaFastener, alphaClampedPart, deltaT, fastenerElasticModulus, fastenerStiffnessArea, jointForceRatio):#apply formula from book to calculate thermal load in fasteners
     return (alphaClampedPart - alphaFastener) * deltaT * fastenerElasticModulus * fastenerStiffnessArea * (1 - jointForceRatio)
 
