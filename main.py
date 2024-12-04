@@ -1,9 +1,11 @@
+import math
 import numpy as np
 import bearingfailure as bf
 import thermalstresscheck as ts
 
 import fasterners_design as fd
 import pullthroughfailure as pf
+import minimumplatethicknesspullthrough as mptpf
 
 #Constants defined here
 deltaT = max(ts.maxSolarPanelTemperature - ts.assemblyReferenceTemperature, ts.assemblyReferenceTemperature - ts.minSolarPanelTemperature)
@@ -43,6 +45,7 @@ Plate1Thickness = 0.01 #assumed thickness of vehicle wall
 Plate2Thickness = 0.01 #assumed thickness of lug
 Plate1BearingStrength = 441 * 10 ** 6
 Plate2BearingStrength = Plate1BearingStrength
+
 flag = True
 justLess = False
 justMore = False
@@ -63,8 +66,31 @@ while flag:
         flag = False
     print(Plate1Thickness, Plate2Thickness)
 
+
+d_fi = fasteners.diameter[0]
+pullThroughThicknesses = mptpf.findMinimumThickness(np.linalg.norm(ld.Fy), d_fi)
+Plate1Thickness = max(Plate1Thickness, pullThroughThicknesses[0])
+Plate2Thickness = max(Plate2Thickness,  pullThroughThicknesses[1])
+print(Plate1Thickness)
+print(Plate2Thickness)
+
+
+
 #thermal stress check
 
+alphaFastener = 12e-6
+fastenerElasticModulus = 200e9
+plate1ElasticModulus = 73.1e9
+fastenerStiffnessArea = math.pi*(d_fi/2)**2
+
+
+plateCompliance = ts.FindAttachedPartCompliance(Plate1Thickness, plate1ElasticModulus, )
+jointForceRatio = ts.ForceRatio()
+
+alphaPlate1 = 24.7e-6
+alphaPlate2 = alphaPlate1
+
+print(TestForBearingIncludingThermalStress(AppliedForce, ForceLocation, AppliedMomentVector, Plate1Thickness, Plate2Thickness,  Plate1BearingStrength, Plate2BearingStrength, alphaFastener, alphaPlate1, alphaPlate2, fastenerElasticModulus, fastenerStiffnessArea, jointForceRatio))
 
 
 
