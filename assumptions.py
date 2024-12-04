@@ -48,3 +48,8 @@ com_spacecraft = [-1637.151, 1346.898, 837.037]  # mm
 maxSolarPanelTemperature = 383.15#in Kelvins
 minSolarPanelTemperature = 168.15#in Kelvins
 assemblyReferenceTemperature = 288.15#in Kelvins
+
+#=======================================================
+#Fasterners design
+
+fastener_horizontal_spacing = 0.2 # Meters

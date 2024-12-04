@@ -223,8 +223,8 @@ SF = SF_yield = SF_bearing = 1  #
 # Newtons
 
 
-Fx = np.multiply(np.array([27.05, 0, 0]), SF)
-Fy = np.multiply(np.array([0, 27.05, 0]), SF)
+Fx = np.multiply(np.array([511, 0, 0]), SF)
+Fy = np.multiply(np.array([0, 108, 0]), SF)
 Fz = np.multiply(np.array([0, 0, -324.6]), SF)
 F1 = np.multiply(np.array([0, 0, 0]), SF)
 
