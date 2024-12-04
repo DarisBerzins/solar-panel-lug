@@ -21,6 +21,8 @@ fastenerCompliance = 1
 attachedPartCompliance = 1
 forceRatio = attachedPartCompliance/(attachedPartCompliance + fastenerCompliance)
 
+def ForceRatio(attachedPartCompliance, fastenerCompliance):
+    return attachedPartCompliance/(attachedPartCompliance + fastenerCompliance)
 
 
 def FindThermalLoad(alphaFastener, alphaClampedPart, deltaT, fastenerElasticModulus, fastenerStiffnessArea, jointForceRatio):#apply formula from book to calculate thermal load in fasteners

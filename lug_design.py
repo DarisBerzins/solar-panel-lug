@@ -286,60 +286,60 @@ def calculate_R_values(material, D1, t1, w):
 best_deviation = [10000, None, None, None, None]
 safety_margin = 0
 
-for material in materials:
-    for D1 in np.arange(0.01, 0.5, 0.002): # meters
-        for i in range(100):
-            print("-", end = ""),
-        print()
-        print("X", end = ""),
-        for i in range(int(100*((D1.item()-0.03)/0.5))):
-            print("X", end = ""),
-        print()
-        for i in range(100):
-            print("-", end = ""),
-        print()
-        print("Material: " + str(material["number"]))
-        print("Progress: " + str(((D1.item()-0.03)/0.5)*100) + "%")
-        print("Best fit: " + str(best_deviation[0]))
-        print("Safety margin: " + str(safety_margin))
-        print()
-        print("Best w, t1, D1, material: " + str(best_deviation[1]) + ',' + str(best_deviation[2]) + ',' + str(best_deviation[3]) + ',' + str(best_deviation[4]))
-        print()
-        print("Trying D = " + str(D1))
-        print()
-        for t1 in np.arange(0.001, 0.5, 0.002):
-            # print(D1, t1)
-            for w in np.arange(D1, 0.5, 0.002):  # w> t1 >e (doesn't) affect the weight> D ( a higher value affect the weight positivily), therefore check e at the end
-                Ra, Rtr = calculate_R_values(material, D1, t1, w)
-                # print(Ra, Rtr)
-                # print(Ra,Rtr)
-                # print(np.pow(Ra,1.6),np.pow(abs(Rtr),1.6))
-                #deviation = 1 - (np.pow(Ra, 1.6) + np.pow(abs(Rtr), 1.6))
-                deviation = 1 - (np.power(Ra, 1.6) + np.power(abs(Rtr), 1.6))
-                if deviation < best_deviation[0] and deviation > 0:
-                    best_deviation = [deviation, w, t1, D1, material["number"]]
-                    safety_margin = (1/np.pow((np.pow(Ra,1.6) + np.pow(abs(Rtr), 1.6)), 0.625)) -1
-                    # print(best_deviation)
-                    # time.sleep(1)
-                # if deviation < 0.5 and deviation > 0:
-                #     print(material["name"], D1, t1, w)
-    for i in range(100):
-        print("-", end = ""),
-    print()
-    print("X", end = ""),
-    for i in range(int(100*((D1.item()-0.03)/0.5))):
-        print("X", end = ""),
-    print()
-    for i in range(100):
-        print("-", end = ""),
-    print()
-    print("Material: " + str(material["number"]))
-    print("Progress: " + str(((D1.item()-0.03)/0.5)*100) + "%")
-    print("Best fit: " + str(best_deviation[0]))
-    print("Safety margin: " + str(safety_margin))
-    print()
-    print("Best w, t1, D1, material: " + str(best_deviation[1]) + ',' + str(best_deviation[2]) + ',' + str(best_deviation[3]) + ',' + str(best_deviation[4]))
-    print()
-    print("Trying D = " + str(D1))
-    print()
-# Output the best design '''
+# for material in materials:
+#     for D1 in np.arange(0.01, 0.5, 0.002): # meters
+#         for i in range(100):
+#             print("-", end = ""),
+#         print()
+#         print("X", end = ""),
+#         for i in range(int(100*((D1.item()-0.03)/0.5))):
+#             print("X", end = ""),
+#         print()
+#         for i in range(100):
+#             print("-", end = ""),
+#         print()
+#         print("Material: " + str(material["number"]))
+#         print("Progress: " + str(((D1.item()-0.03)/0.5)*100) + "%")
+#         print("Best fit: " + str(best_deviation[0]))
+#         print("Safety margin: " + str(safety_margin))
+#         print()
+#         print("Best w, t1, D1, material: " + str(best_deviation[1]) + ',' + str(best_deviation[2]) + ',' + str(best_deviation[3]) + ',' + str(best_deviation[4]))
+#         print()
+#         print("Trying D = " + str(D1))
+#         print()
+#         for t1 in np.arange(0.001, 0.5, 0.002):
+#             # print(D1, t1)
+#             for w in np.arange(D1, 0.5, 0.002):  # w> t1 >e (doesn't) affect the weight> D ( a higher value affect the weight positivily), therefore check e at the end
+#                 Ra, Rtr = calculate_R_values(material, D1, t1, w)
+#                 # print(Ra, Rtr)
+#                 # print(Ra,Rtr)
+#                 # print(np.pow(Ra,1.6),np.pow(abs(Rtr),1.6))
+#                 #deviation = 1 - (np.pow(Ra, 1.6) + np.pow(abs(Rtr), 1.6))
+#                 deviation = 1 - (np.power(Ra, 1.6) + np.power(abs(Rtr), 1.6))
+#                 if deviation < best_deviation[0] and deviation > 0:
+#                     best_deviation = [deviation, w, t1, D1, material["number"]]
+#                     safety_margin = (1/np.pow((np.pow(Ra,1.6) + np.pow(abs(Rtr), 1.6)), 0.625)) -1
+#                     # print(best_deviation)
+#                     # time.sleep(1)
+#                 # if deviation < 0.5 and deviation > 0:
+#                 #     print(material["name"], D1, t1, w)
+#     for i in range(100):
+#         print("-", end = ""),
+#     print()
+#     print("X", end = ""),
+#     for i in range(int(100*((D1.item()-0.03)/0.5))):
+#         print("X", end = ""),
+#     print()
+#     for i in range(100):
+#         print("-", end = ""),
+#     print()
+#     print("Material: " + str(material["number"]))
+#     print("Progress: " + str(((D1.item()-0.03)/0.5)*100) + "%")
+#     print("Best fit: " + str(best_deviation[0]))
+#     print("Safety margin: " + str(safety_margin))
+#     print()
+#     print("Best w, t1, D1, material: " + str(best_deviation[1]) + ',' + str(best_deviation[2]) + ',' + str(best_deviation[3]) + ',' + str(best_deviation[4]))
+#     print()
+#     print("Trying D = " + str(D1))
+#     print()
+# # Output the best design '''
