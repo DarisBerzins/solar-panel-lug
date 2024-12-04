@@ -314,8 +314,8 @@ for material in materials:
                 # print(Ra, Rtr)
                 # print(Ra,Rtr)
                 # print(np.pow(Ra,1.6),np.pow(abs(Rtr),1.6))
-                deviation = 1 - (np.pow(Ra, 1.6) + np.pow(abs(Rtr), 1.6))
-                # print(deviation)
+                #deviation = 1 - (np.pow(Ra, 1.6) + np.pow(abs(Rtr), 1.6))
+                deviation = 1 - (np.power(Ra, 1.6) + np.power(abs(Rtr), 1.6))
                 if deviation < best_deviation[0] and deviation > 0:
                     best_deviation = [deviation, w, t1, D1, material["number"]]
                     safety_margin = (1/np.pow((np.pow(Ra,1.6) + np.pow(abs(Rtr), 1.6)), 0.625)) -1

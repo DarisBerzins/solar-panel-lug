@@ -2,6 +2,9 @@ import numpy as np
 import bearingfailure as bf
 import thermalstresscheck as ts
 
+import fasterners_design as fd
+import pullthroughfailure as pf
+
 #Constants defined here
 deltaT = max(ts.maxSolarPanelTemperature - ts.assemblyReferenceTemperature, ts.assemblyReferenceTemperature - ts.minSolarPanelTemperature)
 
@@ -23,10 +26,29 @@ def TestForBearingIncludingThermalStress(AppliedForce, ForceLocation, AppliedMom
     return ok
 
 
-#iteration loop
-while True:
-    #select and design lug
-    #fastener pattern
-    print("Bearing Check: ", TestForBearing(AppliedForce, ForceLocation, AppliedMomentVector, Plate1Thickness, Plate2Thickness, Plate1BearingStrength, Plate2BearingStrength))
-    print("Bearing Check Incl Thermal Stress: ", TestForBearingIncludingThermalStress(AppliedForce, ForceLocation, AppliedMomentVector, Plate1Thickness, Plate2Thickness, Plate1BearingStrength, Plate2BearingStrength, alphaFastener, alphaPlate1, alphaPlate2, fastenerElasticModulus, fastenerStiffnessArea, jointForceRatio))
-    #all the other failure modes
+
+#calculate forces
+from Loadcasecalculation import F_thruster, M_thruster
+from Loadcasecalculationslew import F_launch, M_launch
+
+#run lug design
+import lug_design as ld
+print(ld.best_deviation)#[deviation, w, t1, D1, material["number"]]
+
+#run fastener design
+fastenersDesigned = fd.optimum_configuration(ld.best_deviation[1], )
+#get coordinates of all the fasteners
+
+#bearing and pull through iteration to find thicknesses
+
+#thermal stress check
+
+
+
+
+margin = 0
+while margin > 1 and margin < 2:
+    margin = TestForBearing(AppliedForce, ForceLocation, AppliedMomentVector, Plate1Thickness, Plate2Thickness, Plate1BearingStrength, Plate2BearingStrength)
+    print("Bearing Check: ", margin)
+
+print("Bearing Check Incl Thermal Stress: ", TestForBearingIncludingThermalStress(AppliedForce, ForceLocation, AppliedMomentVector, Plate1Thickness, Plate2Thickness, Plate1BearingStrength, Plate2BearingStrength, alphaFastener, alphaPlate1, alphaPlate2, fastenerElasticModulus, fastenerStiffnessArea, jointForceRatio))

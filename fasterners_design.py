@@ -41,7 +41,7 @@ def edge_distance (D2):
     return e1, e2
 
 
-w=38.0
-D2=7.5
+w=6.5
+D2=1.2
 x_initial=2.0
 print(optimum_configuration(w, D2, x_initial))
