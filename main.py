@@ -16,7 +16,7 @@ deltaT = max(ts.maxSolarPanelTemperature - ts.assemblyReferenceTemperature, ts.a
 def TestForBearing(AppliedForce, ForceLocation, AppliedMomentVector, Plate1Thickness, Plate2Thickness, Plate1BearingStrength, Plate2BearingStrength):
     # Takes a whole lot of arguments and returns True if nothing breaks and False if it is not ok
     fasteners.FindInPlaneForces(AppliedForce, ForceLocation, AppliedMomentVector)
-    ok = fasteners.CheckBearingOK(Plate1Thickness, Plate1BearingStrength) and fasteners.CheckBearingOK(Plate2Thickness, Plate2BearingStrength)
+    ok = fasteners.CheckBearingOK(Plate1Thickness, Plate1BearingStrength, AppliedForce, ForceLocation, AppliedMomentVector) and fasteners.CheckBearingOK(Plate2Thickness, Plate2BearingStrength, AppliedForce, ForceLocation, AppliedMomentVector)
     return ok
 #========================================================================
 
@@ -24,7 +24,7 @@ def TestForBearingIncludingThermalStress(AppliedForce, ForceLocation, AppliedMom
     thermalLoad1 = ts.FindThermalLoad(alphaFastener, alphaPlate1, deltaT, fastenerElasticModulus, fastenerStiffnessArea, jointForceRatio)
     thermalLoad2 = ts.FindThermalLoad(alphaFastener, alphaPlate2, deltaT, fastenerElasticModulus, fastenerStiffnessArea, jointForceRatio)
     fasteners.FindInPlaneForces(AppliedForce, ForceLocation, AppliedMomentVector)
-    ok = fasteners.CheckBearingOKThermalEdition(Plate1Thickness, Plate1BearingStrength, thermalLoad1) and fasteners.CheckBearingOKThermalEdition(Plate2Thickness, Plate2BearingStrength, thermalLoad2)
+    ok = fasteners.CheckBearingOKThermalEdition(Plate1Thickness, Plate1BearingStrength, thermalLoad1, AppliedForce, ForceLocation, AppliedMomentVector) and fasteners.CheckBearingOKThermalEdition(Plate2Thickness, Plate2BearingStrength, thermalLoad2, AppliedForce, ForceLocation, AppliedMomentVector)
     return ok
 
 
@@ -38,7 +38,9 @@ import lug_design as ld
 best_dev = ld.best_deviation
 print(best_dev)#[deviation, w, t1, D1, material["number"]]
 
+
 #run fastener design
+D2 = 0.0012
 fastenersDesigned = fd.optimum_configuration(best_dev[1], D2,2)
 #get coordinates of all the fasteners
 
@@ -47,7 +49,7 @@ fasteners_h_spacing = assumptions.fastener_horizontal_spacing
 coordinates = []
 
 if (fasteners_amount % 2 == 0):
-    for i in fasteners_amount/2:
+    for i in range(0, int(fasteners_amount/2)):
         y1 = (fasteners_v_spacing/2) + fasteners_v_spacing * i
         y2 = 0-y1
         x1 = fasteners_h_spacing
@@ -67,7 +69,8 @@ else:
             coordinates.append([x2, y2])
 
 #Fastener configuration: (Coords array, diameters array
-fasteners = bf.FastenersClass(np.array(([1, 1, 1], [0, 0, 0])), np.array([2, 3]))
+fasteners = bf.FastenersClass(np.array(coordinates), np.full((int(fasteners_amount)), D2))
+
 #bearing and pull through iteration to find thicknesses
 AppliedForce = ld.Fx + ld.Fy + ld.Fz
 ForceLocation = np.array([0.0, 0.0, 0.0])
