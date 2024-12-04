@@ -35,7 +35,6 @@ def print_okay(good, stress_okay, stress_yield_okay, safety2 = 1.5):
         message = "will fail, reduce the stress with " + difference_needed + "[MPa]"
     return message
 
-    
 #computations lug backup wall 
 A_shear_backup = calculate_A_shear(D_fi, t_2)
 tau_backup = F_yi / A_shear_backup
