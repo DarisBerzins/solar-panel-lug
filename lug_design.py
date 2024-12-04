@@ -217,7 +217,7 @@ load_cases = [
 ]
 '''
 # these still have to be decided
-SF = SF_yield = SF_bearing = 10  #
+SF = SF_yield = SF_bearing = 1  #
 
 # for the chosen loadcase
 # Newtons
