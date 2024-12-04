@@ -4,8 +4,14 @@ maxSolarPanelTemperature = 383.15#in Kelvins
 minSolarPanelTemperature = 168.15#in Kelvins
 
 assemblyReferenceTemperature = 288.15#in Kelvins
-
+#fastener + plates constants
 E_a = 73.4 * 10e9 #Pa
+# stainless steel 355
+D_f0=0.002#m
+D_fi=0.0012#m
+Emodb=190*10**9#Pa
+SubsL=[0.0007,0.004]
+SubsA=[np.pi*0.002**2,2*np.pi*0.002**2]
 
 def FindAttachedPartCompliance(thickness, Emoda, D_f0, D_fi): #apply formula to calcuate compliance of part
     return ( 4*thickness ) / ( Emoda * np.pi * ( D_f0**2 - D_fi**2 ) )
