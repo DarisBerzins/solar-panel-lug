@@ -83,11 +83,23 @@ Plate1BearingStrength = 441 * 10 ** 6
 Plate2BearingStrength = Plate1BearingStrength
 F_yi = 7143
 
+d_fi = fasteners.diameter[0]
+alphaFastener = 12e-6
+fastenerElasticModulus = 200e9
+plate1ElasticModulus = 73.1e9
+fastenerStiffnessArea = math.pi*(d_fi/2)**2
+plateCompliance = ts.FindAttachedPartCompliance(Plate1Thickness, plate1ElasticModulus, ts.D_f0, ts.D_fi)
+fastenerCompliance = ts.FindFastenerCompliance(ts.Emodb, ts.SubsL, ts.SubsA)
+jointForceRatio = ts.ForceRatio(plateCompliance, fastenerCompliance)
+
+alphaPlate1 = 24.7e-6
+alphaPlate2 = alphaPlate1
+
 flag = True
 justLess = False
 justMore = False
 while flag:
-    margin = TestForBearing(AppliedForce, ForceLocation, AppliedMomentVector, Plate1Thickness, Plate2Thickness, Plate1BearingStrength, Plate2BearingStrength)
+    margin = TestForBearingIncludingThermalStress(AppliedForce, ForceLocation, AppliedMomentVector, Plate1Thickness, Plate2Thickness,  Plate1BearingStrength, Plate2BearingStrength, alphaFastener, alphaPlate1, alphaPlate2, fastenerElasticModulus, fastenerStiffnessArea, jointForceRatio)
     print("Bearing margin: ", margin)
     
     if justLess and justMore: break
@@ -104,7 +116,7 @@ while flag:
     print(Plate1Thickness, Plate2Thickness)
 
 
-d_fi = fasteners.diameter[0]
+
 pullThroughThicknesses = mptpf.findMinimumThickness(7143, d_fi)
 print(pullThroughThicknesses)
 Plate1Thickness = max(Plate1Thickness, pullThroughThicknesses[0])
@@ -116,25 +128,3 @@ print("Final vehicle wall thickness: " + str(Plate2Thickness))
 
 #thermal stress check
 
-alphaFastener = 12e-6
-fastenerElasticModulus = 200e9
-plate1ElasticModulus = 73.1e9
-fastenerStiffnessArea = math.pi*(d_fi/2)**2
-
-
-plateCompliance = ts.FindAttachedPartCompliance(Plate1Thickness, plate1ElasticModulus, )
-jointForceRatio = ts.ForceRatio()
-
-alphaPlate1 = 24.7e-6
-alphaPlate2 = alphaPlate1
-
-print(TestForBearingIncludingThermalStress(AppliedForce, ForceLocation, AppliedMomentVector, Plate1Thickness, Plate2Thickness,  Plate1BearingStrength, Plate2BearingStrength, alphaFastener, alphaPlate1, alphaPlate2, fastenerElasticModulus, fastenerStiffnessArea, jointForceRatio))
-
-
-
-margin = 0
-while margin > 1 and margin < 2:
-    margin = TestForBearing(AppliedForce, ForceLocation, AppliedMomentVector, Plate1Thickness, Plate2Thickness, Plate1BearingStrength, Plate2BearingStrength)
-    print("Bearing Check: ", margin)
-
-print("Bearing Check Incl Thermal Stress: ", TestForBearingIncludingThermalStress(AppliedForce, ForceLocation, AppliedMomentVector, Plate1Thickness, Plate2Thickness, Plate1BearingStrength, Plate2BearingStrength, alphaFastener, alphaPlate1, alphaPlate2, fastenerElasticModulus, fastenerStiffnessArea, jointForceRatio))
