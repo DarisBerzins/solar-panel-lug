@@ -293,7 +293,7 @@ def calculate_R_values(material, D1, t1, w):
 best_deviation = [10000, None, None, None, None]
 safety_margin = 0
 
-best_deviation = [0.8, 0.022,  0.001, 0.02, 2]
+best_deviation = [0.8, 0.022,  0.005, 0.02, 2]
 
 # for material in materials:
 #     for D1 in np.arange(0.02, 0.5, 0.001): # meters
