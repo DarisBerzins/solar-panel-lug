@@ -44,14 +44,6 @@ for x, y in coordinates:
     # Total out-of-plane force for this fastener
     F_total = F_pz + Mz_contribution + Mx_contribution
     F_yi.append(F_total)
-
-# Step 4: Stress calculations
-cross_section_area = np.pi * (R_fo**2 - R_fi**2)  # Cross-sectional area of fastener
-normal_stresses = [F / cross_section_area / t for F in F_yi]
-
-# Step 5: Margins of Safety
-margins_of_safety = [(sigma_yield / sigma - 1) for sigma in normal_stresses]
-
 # Output results
 print("Results for Fastener Loading:")
 for i, (stress, ms, Fyi) in enumerate(zip(normal_stresses, margins_of_safety, F_yi)):
@@ -60,10 +52,3 @@ for i, (stress, ms, Fyi) in enumerate(zip(normal_stresses, margins_of_safety, F_
     print(f"  Out-of-Plane Load (F_yi): {Fyi:.2f} N ({status})")
     
     print()
-
-# Step 6: Check for failure
-failures = [i+1 for i, ms in enumerate(margins_of_safety) if ms < 0]
-if failures:
-    print(f"Design failing for fastener(s): {failures}. Consider increasing t or using stronger material.")
-else:
-    print("Design is safe.")
