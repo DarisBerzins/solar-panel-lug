@@ -293,7 +293,7 @@ def calculate_R_values(material, D1, t1, w):
 best_deviation = [10000, None, None, None, None]
 safety_margin = 0
 
-best_deviation = [0.8, 0.022,  0.005, 0.02, 2]
+best_deviation = [0.99, 0.025,0.005,0.02,2]
 
 # for material in materials:
 #     for D1 in np.arange(0.02, 0.5, 0.001): # meters
@@ -316,9 +316,9 @@ best_deviation = [0.8, 0.022,  0.005, 0.02, 2]
 #         print()
 #         print("Trying D = " + str(D1))
 #         print()
-#         for t1 in np.arange(0.001, 0.01, 0.001):
+#         for t1 in np.arange(0.005, 0.01, 0.001):
 #             # print(D1, t1)
-#             for w in np.arange(D1, 0.5, 0.002):  # w> t1 >e (doesn't) affect the weight> D ( a higher value affect the weight positivily), therefore check e at the end
+#             for w in np.arange(D1+0.005, 0.5, 0.002):  # w> t1 >e (doesn't) affect the weight> D ( a higher value affect the weight positivily), therefore check e at the end
 #                 Ra, Rtr = calculate_R_values(material, D1, t1, w)
 #                 # print(Ra, Rtr)
 #                 # print(Ra,Rtr)
@@ -351,4 +351,4 @@ best_deviation = [0.8, 0.022,  0.005, 0.02, 2]
 #     print()
 #     print("Trying D = " + str(D1))
 #     print()
-# # Output the best design '''
+# # # Output the best design '''
