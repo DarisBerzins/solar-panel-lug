@@ -122,8 +122,8 @@ import Fasteners as fast
 
 pullThroughThicknesses = mptpf.findMinimumThickness(max(fast.F_yi), d_fi)
 print(pullThroughThicknesses)
-Plate1Thickness = max(Plate1Thickness, pullThroughThicknesses[0])
-Plate2Thickness = max(Plate2Thickness,  pullThroughThicknesses[1])
+Plate1Thickness = max(Plate1Thickness, pullThroughThicknesses[0])/2
+Plate2Thickness = max(Plate2Thickness,  pullThroughThicknesses[1])/2
 print("Final lug thickness: " + str(Plate1Thickness))
 print("Final vehicle wall thickness: " + str(Plate2Thickness))
 print("[deviation, w, t1, D1, material[number]]")
