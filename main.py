@@ -72,13 +72,16 @@ else:
 fasteners = bf.FastenersClass(np.array(coordinates), np.full((int(fasteners_amount)), D2))
 
 #bearing and pull through iteration to find thicknesses
-AppliedForce = ld.Fx + ld.Fy + ld.Fz
+AppliedForce = np.add(ld.Fx, ld.Fy, ld.Fz)
+print(AppliedForce)
 ForceLocation = np.array([0.0, 0.0, 0.0])
+print(ForceLocation)
 AppliedMomentVector = np.array([25.6, -25.9, 0.0])#based on second load case 
 Plate1Thickness = 0.01 #assumed thickness of vehicle wall
 Plate2Thickness = 0.01 #assumed thickness of lug
 Plate1BearingStrength = 441 * 10 ** 6
 Plate2BearingStrength = Plate1BearingStrength
+F_yi = 7143
 
 flag = True
 justLess = False
@@ -102,11 +105,12 @@ while flag:
 
 
 d_fi = fasteners.diameter[0]
-pullThroughThicknesses = mptpf.findMinimumThickness(np.linalg.norm(ld.Fy), d_fi)
+pullThroughThicknesses = mptpf.findMinimumThickness(7143, d_fi)
+print(pullThroughThicknesses)
 Plate1Thickness = max(Plate1Thickness, pullThroughThicknesses[0])
 Plate2Thickness = max(Plate2Thickness,  pullThroughThicknesses[1])
-print(Plate1Thickness)
-print(Plate2Thickness)
+print("Final lug thickness: " + str(Plate1Thickness))
+print("Final vehicle wall thickness: " + str(Plate2Thickness))
 
 
 
