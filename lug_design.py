@@ -241,6 +241,13 @@ materials = [
      # *145.038
 
      }]
+
+# Only material 2
+# materials = [
+#     {"number": 2, "name": "Aluminum 2024-T4", "Ftu": 469 * (10 ** 6)  # Pa
+#      # *145.038
+#
+#      }]
 '''
 materials = [
     {"number":1, "name": "Aluminum 7075", "Ftu": 524*145.038#Psi
@@ -289,19 +296,19 @@ safety_margin = 0
 best_deviation = [0, 0.012,  0.001, 0.01, 2]
 
 # for material in materials:
-#     for D1 in np.arange(0.01, 0.5, 0.002): # meters
+#     for D1 in np.arange(0.003, 0.5, 0.001): # meters
 #         for i in range(100):
 #             print("-", end = ""),
 #         print()
 #         print("X", end = ""),
-#         for i in range(int(100*((D1.item()-0.03)/0.5))):
+#         for i in range(int(100*((D1.item()-0.003)/0.5))):
 #             print("X", end = ""),
 #         print()
 #         for i in range(100):
 #             print("-", end = ""),
 #         print()
 #         print("Material: " + str(material["number"]))
-#         print("Progress: " + str(((D1.item()-0.03)/0.5)*100) + "%")
+#         print("Progress: " + str(((D1.item()-0.003)/0.5)*100) + "%")
 #         print("Best fit: " + str(best_deviation[0]))
 #         print("Safety margin: " + str(safety_margin))
 #         print()
@@ -344,4 +351,4 @@ best_deviation = [0, 0.012,  0.001, 0.01, 2]
 #     print()
 #     print("Trying D = " + str(D1))
 #     print()
-# # Output the best design '''
+# Output the best design '''
