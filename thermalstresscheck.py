@@ -7,12 +7,12 @@ assemblyReferenceTemperature = 288.15#in Kelvins
 #fastener + plates constants
 E_a = 73.4 * 10e9 #Pa
 # stainless steel 355
-D_f0=0.0005#m
-D_fi=0.0011#m
+D_f0=0.0085#m
+D_fi=0.005#m
 Emodb=190*10**9#Pa
-SubsL=[0.0007,0.004]
-SubsA=[np.pi*0.002**2,2*np.pi*0.002**2]
-thickness=0.023
+SubsL=[0.0017,0.04]
+SubsA=[np.pi*0.0052**2,np.pi*0.005**2]
+thickness=0.02
 Emoda=73*10**9
 def FindAttachedPartCompliance(thickness, Emoda, D_f0, D_fi): #apply formula to calcuate compliance of part
     return ( 4*thickness ) / ( Emoda * np.pi * ( D_f0**2 - D_fi**2 ) )
@@ -27,8 +27,7 @@ alphaSpacecraftWall = 1
 fastenerCompliance = FindFastenerCompliance(Emodb, SubsL, SubsA)
 attachedPartCompliance =FindAttachedPartCompliance(thickness, Emoda, D_f0, D_fi)
 forceRatio = attachedPartCompliance/(attachedPartCompliance + fastenerCompliance)
-print(attachedPartCompliance)
-print(fastenerCompliance)
+
 print(forceRatio)
 
 def ForceRatio(attachedPartCompliance, fastenerCompliance):
