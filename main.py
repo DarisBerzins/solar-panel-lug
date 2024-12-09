@@ -40,11 +40,13 @@ print(best_dev)#[deviation, w, t1, D1, material["number"]]
 
 
 #run fastener design
-D2 = 0.0012
+D2 = best_dev[1] / (5)
 fastenersDesigned = fd.optimum_configuration(best_dev[1], D2,2)
+print(fastenersDesigned)
 #get coordinates of all the fasteners
 
-fasteners_amount, fasteners_v_spacing = fd.optimum_configuration(best_dev[1], D2,2)
+fasteners_amount = fastenersDesigned[0]
+fasteners_v_spacing = fastenersDesigned[1]
 fasteners_h_spacing = assumptions.fastener_horizontal_spacing
 coordinates = []
 
@@ -115,16 +117,17 @@ while flag:
         flag = False
     print(Plate1Thickness, Plate2Thickness)
 
+import Fasteners as fast
 
 
-pullThroughThicknesses = mptpf.findMinimumThickness(7143, d_fi)
+pullThroughThicknesses = mptpf.findMinimumThickness(max(fast.F_yi), d_fi)
 print(pullThroughThicknesses)
 Plate1Thickness = max(Plate1Thickness, pullThroughThicknesses[0])
 Plate2Thickness = max(Plate2Thickness,  pullThroughThicknesses[1])
 print("Final lug thickness: " + str(Plate1Thickness))
 print("Final vehicle wall thickness: " + str(Plate2Thickness))
+print("[deviation, w, t1, D1, material[number]]")
+print(best_dev)
 
 
-
-#thermal stress check
 

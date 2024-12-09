@@ -30,7 +30,9 @@ def optimum_configuration (w, D2, x):
         #print(x)
         #print(spacing_factor)
         if 2<=spacing_factor<=3:
-            return number_fastener, fastener_space
+            print(number_fastener)
+            print(fastener_space)
+            return [number_fastener, fastener_space]
         x+=0.01
 
 # distance between edge of the plate and nearest fastener 
@@ -41,7 +43,7 @@ def edge_distance (D2):
     return e1, e2
 
 
-w=6.5
-D2=1.2
-x_initial=2.0
-print(optimum_configuration(w, D2, x_initial))
+# w=6.5
+# D2=1.2
+# x_initial=2.0
+# print(optimum_configuration(w, D2, x_initial))
