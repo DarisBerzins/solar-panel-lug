@@ -51,7 +51,7 @@ class FastenersClass():
 
 def FindMomentArmVector(location1, vectorAtLocation1, location2):
     '''Finds moment arm vector from location2 to vector passing through location1'''
-    vectorY = location2 - location1#vector y in orthogonal projection
+    vectorY = np.resize(location2, 3) - np.resize(location1, 3)#vector y in orthogonal projection
     projection = (np.dot(vectorY, vectorAtLocation1)/np.dot(vectorAtLocation1, vectorAtLocation1)) * vectorAtLocation1#orthogonal projection
     return projection - vectorY#return difference between orthogonal projection and vector y
 
