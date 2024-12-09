@@ -127,6 +127,7 @@ Plate2Thickness = max(Plate2Thickness,  pullThroughThicknesses[1])
 print("Final lug thickness: " + str(Plate1Thickness))
 print("Final vehicle wall thickness: " + str(Plate2Thickness))
 print("[deviation, w, t1, D1, material[number]]")
+print("fastener diameter: " + str(D2))
 print(best_dev)
 
 

@@ -55,10 +55,10 @@ def FindMomentArmVector(location1, vectorAtLocation1, location2):
     projection = (np.dot(vectorY, vectorAtLocation1)/np.dot(vectorAtLocation1, vectorAtLocation1)) * vectorAtLocation1#orthogonal projection
     return projection - vectorY#return difference between orthogonal projection and vector y
 
-fasteners = FastenersClass(np.array(([1, 1, 1], [0, 0, 0])), np.array([2, 3]))
+# fasteners = FastenersClass(np.array(([1, 1, 1], [0, 0, 0])), np.array([2, 3]))
 
-print(fasteners.getCg())
-print(fasteners.CheckBearingOK(0.1, 2, np.array(([1.0,1.0,1.0])), np.array(([1.0,1.0,1.0])), np.array(([1.0,1.0,1.0]))))
+# print(fasteners.getCg())
+# print(fasteners.CheckBearingOK(0.1, 2, np.array(([1.0,1.0,1.0])), np.array(([1.0,1.0,1.0])), np.array(([1.0,1.0,1.0]))))
 
 #balls
 
