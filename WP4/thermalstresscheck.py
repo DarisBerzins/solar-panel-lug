@@ -6,7 +6,7 @@ minSolarPanelTemperature = 168.15#in Kelvins
 assemblyReferenceTemperature = 288.15#in Kelvins
 #fastener + plates constants
 E_a = 73.4 * 10e9 #Pa
-# stainless steel 355
+# stainless steel 316
 D_f0=0.0085#m
 D_fi=0.005#m
 Emodb=190*10**9#Pa
