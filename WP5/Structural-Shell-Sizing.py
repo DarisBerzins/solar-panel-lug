@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 '''IDEAS:
-- 
+- Multiple shells one on top of the other with different thicknesses can reduce weight
 '''
 
 '''ASSUMPTIONS:
@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 '''
 
 class Shell:
-    def __init__(self, length, diameter, E_modulus, density, initial_thickness):
+    def __init__(self, length, diameter, E_modulus, density, initial_thickness, poisson_ratio):
         self.length = length
         self.diameter = diameter
         self.E_modulus = E_modulus
@@ -22,6 +22,7 @@ class Shell:
         self.total_mass = 2 * np.pi * (self.diameter / 2) * self.thickness * self.length * self.density * self.acceleration
         self.heights = np.array([])
         self.loads_above = np.array([])
+        self.poisson_ratio = poisson_ratio
     def add_mass(self, mass, height_position):
         '''Adds a mass at a height position'''
         self.masses = np.append(self.masses, [[mass, height_position]], axis=0)
@@ -78,23 +79,54 @@ class Shell:
         plt.show()
     def get_safety_factor(self, allowed, real):
         return allowed / real
-    def find_column_buckling_thickness(self):
-        R = self.diameter/2
-        sigmacr = (np.power(np.pi, 2)*self.E_modulus*0.5*np.pi*np.power(R, 4)*np.power((R-self.thickness), 4))/(2*np.pi*R*self.thickness)
-        sigmareal = shell.get_maxload(1000)/(2*np.pi*R*self.thickness)
-        SM = shell.get_safety_factor(sigmacr, sigmareal)
+    def find_column_buckling_thickness(self, initial_thickness, margin=np.array([1.0, 1.05]), maxit=100):
         '''finds the needed thickness of the shell to resist column buckling'''
-    def find_shell_buckling_thickness(self, initial_thickness, margin=np.array([1.0, 1.05])):
+        R = self.diameter/2
+        iterthickness = initial_thickness
+        SM = margin[0] - 0.5
+        i=0
+        while SM < margin[0] or SM > margin[1]:
+            sigmacr = (np.power(np.pi, 2)*self.E_modulus*0.5*np.pi*(np.power(R, 4)-np.power((R-iterthickness), 4)))/(2*np.pi*R*iterthickness)
+            sigmareal = self.get_maxload(1000)/(2*np.pi*R*iterthickness)
+            SM = self.get_safety_factor(sigmacr, sigmareal)
+            iterthickness = iterthickness/SM
+            i+=1
+            if i > maxit:
+                print('Maximum iteration read')
+                break
+        return iterthickness
+    def find_shell_buckling_thickness(self, pressure,initial_thickness, margin=np.array([1.0, 1.05]), maxit=100):
         '''finds the needed thickness of the shell to resist shell buckling'''
-        thickness = initial_thickness
+        SM = margin[1] + 1
+        R = self.diameter / 2
+        iterthickness = initial_thickness
+        i=0
+        while SM < margin[0] or SM > margin[1]:
+            sigmacr = self.get_shell_buckling_critical(iterthickness, pressure)
+            sigmareal = shell.get_maxload(1000)/(2*np.pi*R*iterthickness)
+            SM = self.get_safety_factor(sigmacr, sigmareal)
+            iterthickness = iterthickness/SM
+            i+=1
+            if i > maxit:
+                print('Maximum iteration read')
+                break
+        return iterthickness
 
-        while SF > margin[1] or SF < margin[0]:
-    def get_shell_buckling_critical(self):
-        critical_sigma = k*(1.983 - 0.983 * np.exp(-23.14 * Q))*(((np.pi**2)*self.E_modulus)/12(1-(v**2)))*((t/self.length)**2)
+    def find_lambda(self, thickness):
+        return np.sqrt((12*(self.length**4)*(1-(self.poisson_ratio**2)))/((np.pi**4)*((self.diameter/2)**2)*(thickness**2)))
+
+    def get_shell_buckling_critical(self, thickness, pressure):
+        Q = (pressure/self.E_modulus)*(((self.diameter/2)/thickness)**2)
+        lambda_val = self.find_lambda(thickness)
+        k = lambda_val + (12 / np.pi ** 4) * (self.length ** 4 / ((self.diameter/2) ** 2 * thickness ** 2)) * (1 - self.poisson_ratio ** 2) / lambda_val
+        critical_sigma = k*(1.983 - 0.983 * np.exp(-23.14 * Q))*(((np.pi**2)*self.E_modulus)/(12*(1-(self.poisson_ratio**2))))*((thickness/self.length)**2)
+        return critical_sigma
 
 
 # TESTING --------------------------------------------------------
-shell = Shell(length=10, diameter=1, E_modulus=210e9, density=785, initial_thickness=0.1)
+shell = Shell(length=10, diameter=2, E_modulus=73.1e9, density=785, initial_thickness=0.1, poisson_ratio=0.33)
 shell.set_acceleration(9.81*9)
 shell.add_mass_position_array([[1000, 2], [1500, 4], [2000, 6], [2500, 8]])
 shell.plot_normal_stress_diagram(resolution=10000)
+print("Shell buckling: ", shell.find_shell_buckling_thickness(15000, 0.1))
+print("Column buckling: ", shell.find_column_buckling_thickness(0.1))
