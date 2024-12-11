@@ -85,4 +85,6 @@ print(lowestMassNTO)
 class transversePanelClass():
     def __init__(self):
         pass
-    
+    #function to add component to transverse panel
+    #function to add attachment points and fasteners in specific locations
+    #function to give mass and stuff
