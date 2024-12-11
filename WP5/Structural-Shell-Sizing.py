@@ -78,11 +78,16 @@ class Shell:
         plt.show()
     def get_safety_factor(self, allowed, real):
         return allowed / real
-    def find_column_buckling_thickness(self):
+    def find_column_buckling_thickness(self, initial_thickness, margin=np.array([1.0, 1.05])):
         R = self.diameter/2
-        sigmacr = (np.power(np.pi, 2)*self.E_modulus*0.5*np.pi*np.power(R, 4)*np.power((R-self.thickness), 4))/(2*np.pi*R*self.thickness)
-        sigmareal = shell.get_maxload(1000)/(2*np.pi*R*self.thickness)
-        SM = shell.get_safety_factor(sigmacr, sigmareal)
+        iterthickness = self.thickness
+        SM = margin[1] + 1
+        while iterthickness < margin[0] and iterthickness > margin[1]:
+            sigmacr = (np.power(np.pi, 2)*self.E_modulus*0.5*np.pi*np.power(R, 4)*np.power((R-iterthickness), 4))/(2*np.pi*R*iterthickness)
+            sigmareal = shell.get_maxload(1000)/(2*np.pi*R*iterthickness)
+            SM = shell.get_safety_factor(sigmacr, sigmareal)
+            iterthickness = SM*initial_thickness
+        return iterthickness
         '''finds the needed thickness of the shell to resist column buckling'''
     def find_shell_buckling_thickness(self, initial_thickness, margin=np.array([1.0, 1.05])):
         '''finds the needed thickness of the shell to resist shell buckling'''
