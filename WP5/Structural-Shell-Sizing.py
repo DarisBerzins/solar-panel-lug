@@ -88,7 +88,7 @@ class Shell:
             sigmacr = (np.power(np.pi, 2)*self.E_modulus*0.5*np.pi*np.power(R, 4)*np.power((R-iterthickness), 4))/(2*np.pi*R*iterthickness)
             sigmareal = self.get_maxload(1000)/(2*np.pi*R*iterthickness)
             SM = self.get_safety_factor(sigmacr, sigmareal)
-            iterthickness = SM*initial_thickness
+            iterthickness = iterthickness/SM
         return iterthickness
     def find_shell_buckling_thickness(self, pressure,initial_thickness, margin=np.array([1.0, 1.05])):
         '''finds the needed thickness of the shell to resist shell buckling'''
@@ -99,7 +99,7 @@ class Shell:
             sigmacr = self.get_shell_buckling_critical(iterthickness, pressure)
             sigmareal = shell.get_maxload(1000)/(2*np.pi*R*iterthickness)
             SM = self.get_safety_factor(sigmacr, sigmareal)
-            iterthickness = SM*initial_thickness
+            iterthickness = iterthickness/SM
         return iterthickness
 
     def find_lambda(self, thickness):
@@ -114,7 +114,7 @@ class Shell:
 
 
 # TESTING --------------------------------------------------------
-shell = Shell(length=10, diameter=1, E_modulus=73.1e9, density=785, initial_thickness=0.1, poisson_ratio=0.33)
+shell = Shell(length=10, diameter=2, E_modulus=73.1e9, density=785, initial_thickness=0.1, poisson_ratio=0.33)
 shell.set_acceleration(9.81*9)
 shell.add_mass_position_array([[1000, 2], [1500, 4], [2000, 6], [2500, 8]])
 shell.plot_normal_stress_diagram(resolution=10000)
