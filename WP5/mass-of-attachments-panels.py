@@ -12,7 +12,6 @@ launchGForce = 12 # assumed g-force during launch
 
 safetyFactor = 2.5 # safety factor for attachment bracket sizing
 
-
 materials = [ # yield stress, density, name
     [215e6, 8000, "304 stainless steel"],
     [193e6, 2680, "aluminum 5052"],
@@ -82,3 +81,8 @@ print("NTO Tank:")
 printAttachmentDimensions(f_NTO/numberOfFastenersNTO, lightestMaterialNTO)
 print(numberOfFastenersNTO)
 print(lowestMassNTO)
+
+class transversePanelClass():
+    def __init__(self):
+        pass
+    
