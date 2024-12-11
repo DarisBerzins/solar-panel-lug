@@ -6,7 +6,6 @@ import bearingfailure as bf
 import thermalstresscheck as ts
 
 import fasterners_design as fd
-import pullthroughfailure as pf
 import minimumplatethicknesspullthrough as mptpf
 
 #Constants defined here
@@ -30,8 +29,6 @@ def TestForBearingIncludingThermalStress(AppliedForce, ForceLocation, AppliedMom
 
 
 #calculate forces
-from Loadcasecalculation import F_thruster, M_thruster
-from Loadcasecalculationslew import F_launch, M_launch
 
 #run lug design
 import lug_design as ld
