@@ -101,6 +101,7 @@ class Shell:
             SM = self.get_safety_factor(sigmacr, sigmareal)
             iterthickness = SM*initial_thickness
         return iterthickness
+
     def find_lambda(self, thickness):
         return np.sqrt((12*np.power(self.length, 4)*(1-np.power(self.poisson_ratio, 2)))/(np.power(np.pi, 4)*np.power(self.diameter/2, 2)*np.power(thickness, 2)))
 
@@ -113,7 +114,7 @@ class Shell:
 
 
 # TESTING --------------------------------------------------------
-shell = Shell(length=10, diameter=1, E_modulus=210e9, density=785, initial_thickness=0.1, poisson_ratio=0.1)
+shell = Shell(length=10, diameter=1, E_modulus=73.1e9, density=785, initial_thickness=0.1, poisson_ratio=0.33)
 shell.set_acceleration(9.81*9)
 shell.add_mass_position_array([[1000, 2], [1500, 4], [2000, 6], [2500, 8]])
 shell.plot_normal_stress_diagram(resolution=10000)
