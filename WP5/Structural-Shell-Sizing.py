@@ -3,11 +3,13 @@ import matplotlib.pyplot as plt
 
 '''IDEAS:
 - Multiple shells one on top of the other with different thicknesses can reduce weight
+- Variable thicknesses for different cylinder sections
 '''
 
 '''ASSUMPTIONS:
 - Shell is thin walled
 - Constant thickness
+- Only loads considered are point load masses and shell distributed weight mass
 '''
 
 class Shell:
@@ -122,14 +124,32 @@ class Shell:
         critical_sigma = k*(1.983 - (0.983 * np.exp(-23.14 * Q)))*(((np.pi**2)*self.E_modulus)/(12*(1-(self.poisson_ratio**2))))*((thickness/self.length)**2)
         return critical_sigma
 
+    def find_thickness_convolution(self, thickness, pressure):
+        massdiff = 10
+        self.thickness = thickness
+        while massdiff >= 0.001:
+            mass = self.total_mass
+            thickness_shell = self.find_shell_buckling_thickness(pressure, self.thickness)
+            thickness_buckling = self.find_column_buckling_thickness(self.thickness)
+            self.thickness = max(thickness_shell, thickness_buckling)
+            self.total_mass = 2 * np.pi * (self.diameter / 2) * self.thickness * self.length * self.density * self.acceleration
+            massdiff = abs(mass - self.total_mass)
+        return self.thickness, thickness_shell, thickness_buckling
+
 
 # TESTING --------------------------------------------------------
 shell = Shell(length=10, diameter=2, E_modulus=73.1e9, density=785, initial_thickness=0.1, poisson_ratio=0.33)
 shell.set_acceleration(9.81*9)
 shell.add_mass_position_array([[1000, 2], [1500, 4], [2000, 6], [2500, 8]])
 shell.plot_normal_stress_diagram(resolution=10000)
+<<<<<<< Updated upstream
 print("Shell buckling: ", shell.find_shell_buckling_thickness(15000, 0.1))
 print("Column buckling: ", shell.find_column_buckling_thickness(0.1))
 # pressures =np.arange(1, 1000, 5)
 # for pressure in pressures:
 #     print(shell.get_shell_buckling_critical(1 ,-pressure))
+=======
+#print("Shell buckling: ", shell.find_shell_buckling_thickness(15000, 0.1))
+#print("Column buckling: ", shell.find_column_buckling_thickness(0.1))
+print("Iterated thickness: ", shell.find_thickness_convolution(0.1, 15000))
+>>>>>>> Stashed changes
