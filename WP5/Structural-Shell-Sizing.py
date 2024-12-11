@@ -103,7 +103,7 @@ class Shell:
         return iterthickness
 
     def find_lambda(self, thickness):
-        return np.sqrt((12*np.power(self.length, 4)*(1-np.power(self.poisson_ratio, 2)))/(np.power(np.pi, 4)*np.power(self.diameter/2, 2)*np.power(thickness, 2)))
+        return np.sqrt((12*(self.length**4)*(1-(self.poisson_ratio**2)))/((np.pi**4)*((self.diameter/2)**2)*(thickness**2)))
 
     def get_shell_buckling_critical(self, thickness, pressure):
         Q = (pressure/self.E_modulus)*(((self.diameter/2)/thickness)**2)
@@ -118,3 +118,5 @@ shell = Shell(length=10, diameter=1, E_modulus=73.1e9, density=785, initial_thic
 shell.set_acceleration(9.81*9)
 shell.add_mass_position_array([[1000, 2], [1500, 4], [2000, 6], [2500, 8]])
 shell.plot_normal_stress_diagram(resolution=10000)
+print("Shell buckling: ", shell.find_shell_buckling_thickness(15000, 0.1))
+print("Column buckling: ", shell.find_column_buckling_thickness(0.1))
