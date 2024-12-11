@@ -90,14 +90,17 @@ class Shell:
             SM = shell.get_safety_factor(sigmacr, sigmareal)
             iterthickness = SM*initial_thickness
         return iterthickness
-    def find_shell_buckling_thickness(self, initial_thickness, margin=np.array([1.0, 1.05])):
+    def find_shell_buckling_thickness(self, pressure,initial_thickness, margin=np.array([1.0, 1.05])):
         '''finds the needed thickness of the shell to resist shell buckling'''
         thickness = initial_thickness
         SM = margin[1] + 1
         iterthickness = self.thickness
         while SM < margin[0] or SM > margin[1]:
-
-
+            sigmacr = self.get_shell_buckling_critical(iterthickness, pressure)
+            sigmareal = shell.get_maxload(1000)/(2*np.pi*R*iterthickness)
+            SM = self.get_safety_factor(sigmacr, sigmareal)
+            iterthickness = SM*initial_thickness
+        return iterthickness
     def get_shell_buckling_critical(self, thickness, pressure):
         Q = (pressure/self.E_modulus)*(((self.diameter/2)/thickness)**2)
         lambda_val = self.find_lambda(thickness)
