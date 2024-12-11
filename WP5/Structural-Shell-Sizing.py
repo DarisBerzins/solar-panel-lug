@@ -82,7 +82,7 @@ class Shell:
         R = self.diameter/2
         iterthickness = self.thickness
         SM = margin[1] + 1
-        while iterthickness < margin[0] and iterthickness > margin[1]:
+        while SM < margin[0] or SM > margin[1]:
             sigmacr = (np.power(np.pi, 2)*self.E_modulus*0.5*np.pi*np.power(R, 4)*np.power((R-iterthickness), 4))/(2*np.pi*R*iterthickness)
             sigmareal = shell.get_maxload(1000)/(2*np.pi*R*iterthickness)
             SM = shell.get_safety_factor(sigmacr, sigmareal)
