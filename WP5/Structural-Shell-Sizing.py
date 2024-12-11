@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 '''IDEAS:
-- 
+- Multiple shells one on top of the other with different thicknesses can reduce weight
 '''
 
 '''ASSUMPTIONS:
@@ -90,34 +90,30 @@ class Shell:
             SM = self.get_safety_factor(sigmacr, sigmareal)
             iterthickness = SM*initial_thickness
         return iterthickness
-    def find_shell_buckling_thickness(self, initial_thickness, margin=np.array([1.0, 1.05])):
     def find_shell_buckling_thickness(self, pressure,initial_thickness, margin=np.array([1.0, 1.05])):
         '''finds the needed thickness of the shell to resist shell buckling'''
-        thickness = initial_thickness
         SM = margin[1] + 1
-        iterthickness = self.thickness
+        R = self.diameter / 2
+        iterthickness = initial_thickness
         while SM < margin[0] or SM > margin[1]:
-<<<<<<< HEAD
-
-    def find_lambda(self, thickness):
-        return np.sqrt((12*np.power(self.length, 4)*(1-np.power(self.poisson_ratio, 2)))/(np.power(np.pi, 4)*np.power(self.diameter/2, 2)*np.power(thickness, 2)))
-=======
             sigmacr = self.get_shell_buckling_critical(iterthickness, pressure)
             sigmareal = shell.get_maxload(1000)/(2*np.pi*R*iterthickness)
             SM = self.get_safety_factor(sigmacr, sigmareal)
             iterthickness = SM*initial_thickness
         return iterthickness
->>>>>>> a324fa967abb2027dfec46aa8694e30547555af4
+    def find_lambda(self, thickness):
+        return np.sqrt((12*np.power(self.length, 4)*(1-np.power(self.poisson_ratio, 2)))/(np.power(np.pi, 4)*np.power(self.diameter/2, 2)*np.power(thickness, 2)))
+
     def get_shell_buckling_critical(self, thickness, pressure):
         Q = (pressure/self.E_modulus)*(((self.diameter/2)/thickness)**2)
         lambda_val = self.find_lambda(thickness)
         k = lambda_val + (12 / np.pi ** 4) * (self.length ** 4 / ((self.diameter/2) ** 2 * thickness ** 2)) * (1 - self.poisson_ratio ** 2) / lambda_val
         critical_sigma = k*(1.983 - 0.983 * np.exp(-23.14 * Q))*(((np.pi**2)*self.E_modulus)/(12*(1-(self.poisson_ratio**2))))*((thickness/self.length)**2)
-
+        return critical_sigma
 
 
 # TESTING --------------------------------------------------------
-shell = Shell(length=10, diameter=1, E_modulus=210e9, density=785, initial_thickness=0.1)
+shell = Shell(length=10, diameter=1, E_modulus=210e9, density=785, initial_thickness=0.1, poisson_ratio=0.1)
 shell.set_acceleration(9.81*9)
 shell.add_mass_position_array([[1000, 2], [1500, 4], [2000, 6], [2500, 8]])
 shell.plot_normal_stress_diagram(resolution=10000)
