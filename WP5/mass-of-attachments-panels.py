@@ -3,58 +3,17 @@ import numpy as np
 #=====================================================
 #INPUTS
 
-class loadCasesClass():
-    def __init__(self):
-        self.forceCases = np.array([
-            [-27.051075, -27.051075, -324.6129],
-            [27.051075, 27.051075, -324.6129],
-            [108.2043, 108.2043, -189.357525],
-            [108.2043, 108.2043, 81.153225],
-            [27.051075, 27.051075, 108.2043],
-            [-27.051075, -27.051075, 108.2043],
-            [-108.2043, -108.2043, 81.153225],
-            [-108.2043, -108.2043, -189.357525],
-            [511, 0., 0.],
-            [0, 0.58267596, -2.76294769],
-            [511, 108.2043, -324.6129]
-        ])
-        self.momentCases = np.array([
-            [-25.8959941,  25.8959941,   0.],
-            [25.8959941, -25.8959941,   0.],
-            [103.58397639, -103.58397639,    0.],
-            [103.58397639, -103.58397639,    0.],
-            [25.8959941, -25.8959941,   0.],
-            [-25.8959941,  25.8959941,   0.],
-            [-103.58397639,  103.58397639,    0.],
-            [-103.58397639,  103.58397639,    0.],
-            [0, 0, 910.7553],
-            [0.10754075, 0, 0],
-            [103.58397639, -103.58397639, 910.7553]
-        ])
-loadCases = loadCasesClass()
+m_NTO = 408.45 # mass of nitrogen tetroxide propellant 
+m_MMO = 247.54 # mass of hydrazine propellant
 
-loadCases.resultantForces = np.linalg.norm(loadCases.forceCases, axis=1)
+m_tank = 17.5 # mass of each propellant tank
 
-largestResultantIndex = np.argmax(loadCases.resultantForces)
+launchGForce = 12 # assumed g-force during launch
 
-largestResultant = loadCases.resultantForces[largestResultantIndex]
+safetyFactor = 2.5 # safety factor for attachment bracket sizing
 
-m_NTO = 408.45 + 247.54
-m_MMO = 247.54
 
-launchGForce = 12
-
-f_NTO = m_NTO * launchGForce * 9.81
-f_MMO = m_MMO * launchGForce * 9.81
-
-largestResultant = (m_NTO + m_MMO) * 12 * 9.81
-
-tanks = [m_NTO, m_MMO]
-
-LBracketYieldStrength = 215e6
-LBracketDensity = 8000
-
-materials = [
+materials = [ # yield stress, density, name
     [215e6, 8000, "304 stainless steel"],
     [193e6, 2680, "aluminum 5052"],
     [450e6, 7870, "aisi 1046 steel"]
@@ -62,6 +21,12 @@ materials = [
 
 #====================================================
 #CODE
+
+m_NTO += m_tank
+m_MMO += m_tank
+
+f_NTO = m_NTO * launchGForce * 9.81 * safetyFactor
+f_MMO = m_MMO * launchGForce * 9.81 * safetyFactor
 
 def MassFromYield(ForcePerFastener, material):
     area = ForcePerFastener/material[0]
@@ -91,18 +56,19 @@ def printAttachmentDimensions(ForcePerFastener, material):
     print("Material: " + material[2])
 
 
-lowestMass = 999999999999
+lowestMassMMO = 999999999999
+lowestMassNTO = 999999999999
 for material in materials:
     #MMO Tank
     for attachmentCount in range(1, 100):
-        if (MassFromYield(f_MMO/attachmentCount, material) * attachmentCount) < lowestMass:
+        if (MassFromYield(f_MMO/attachmentCount, material) * attachmentCount) < lowestMassMMO:
             lowestMassMMO = MassFromYield(f_MMO/attachmentCount, material) * attachmentCount
             numberOfFastenersMMO = attachmentCount
             lightestMaterialMMO = material
     
     #NTO Tank
     for attachmentCount in range(1, 100):
-        if (MassFromYield(f_NTO/attachmentCount, material) * attachmentCount) < lowestMass:
+        if (MassFromYield(f_NTO/attachmentCount, material) * attachmentCount) < lowestMassNTO:
             lowestMassNTO = MassFromYield(f_NTO/attachmentCount, material) * attachmentCount
             numberOfFastenersNTO = attachmentCount
             lightestMaterialNTO = material
