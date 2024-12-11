@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 '''
 
 class Shell:
-    def __init__(self, length, diameter, E_modulus, density, initial_thickness):
+    def __init__(self, length, diameter, E_modulus, density, initial_thickness, poisson_ratio):
         self.length = length
         self.diameter = diameter
         self.E_modulus = E_modulus
@@ -22,6 +22,7 @@ class Shell:
         self.total_mass = 2 * np.pi * (self.diameter / 2) * self.thickness * self.length * self.density * self.acceleration
         self.heights = np.array([])
         self.loads_above = np.array([])
+        self.poisson_ratio = poisson_ratio
     def add_mass(self, mass, height_position):
         '''Adds a mass at a height position'''
         self.masses = np.append(self.masses, [[mass, height_position]], axis=0)
@@ -79,6 +80,7 @@ class Shell:
     def get_safety_factor(self, allowed, real):
         return allowed / real
     def find_column_buckling_thickness(self, initial_thickness, margin=np.array([1.0, 1.05])):
+        '''finds the needed thickness of the shell to resist column buckling'''
         R = self.diameter/2
         iterthickness = self.thickness
         SM = margin[1] + 1
@@ -88,14 +90,20 @@ class Shell:
             SM = shell.get_safety_factor(sigmacr, sigmareal)
             iterthickness = SM*initial_thickness
         return iterthickness
-        '''finds the needed thickness of the shell to resist column buckling'''
     def find_shell_buckling_thickness(self, initial_thickness, margin=np.array([1.0, 1.05])):
         '''finds the needed thickness of the shell to resist shell buckling'''
         thickness = initial_thickness
+        SM = margin[1] + 1
+        iterthickness = self.thickness
+        while SM < margin[0] or SM > margin[1]:
 
-        while SF > margin[1] or SF < margin[0]:
-    def get_shell_buckling_critical(self):
-        critical_sigma = k*(1.983 - 0.983 * np.exp(-23.14 * Q))*(((np.pi**2)*self.E_modulus)/12(1-(v**2)))*((t/self.length)**2)
+
+    def get_shell_buckling_critical(self, thickness, pressure):
+        Q = (pressure/self.E_modulus)*(((self.diameter/2)/thickness)**2)
+        lambda_val = self.find_lambda(thickness)
+        k = lambda_val + (12 / np.pi ** 4) * (self.length ** 4 / ((self.diameter/2) ** 2 * thickness ** 2)) * (1 - self.poisson_ratio ** 2) / lambda_val
+        critical_sigma = k*(1.983 - 0.983 * np.exp(-23.14 * Q))*(((np.pi**2)*self.E_modulus)/(12*(1-(self.poisson_ratio**2))))*((thickness/self.length)**2)
+
 
 
 # TESTING --------------------------------------------------------
