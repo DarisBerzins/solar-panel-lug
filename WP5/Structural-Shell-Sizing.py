@@ -76,15 +76,22 @@ class Shell:
         ax.yaxis.set_label_position('left')
 
         plt.show()
-    def get_safety_margin(self, allowed, real):
+    def get_safety_factor(self, allowed, real):
+        return allowed / real
     def find_column_buckling_thickness(self):
         R = self.diameter/2
         sigmacr = (np.power(np.pi, 2)*self.E_modulus*0.5*np.pi*np.power(R, 4)*np.power((R-self.thickness), 4))/(2*np.pi*R*self.thickness)
         sigmareal = shell.get_maxload(1000)/(2*np.pi*R*self.thickness)
         SM = shell.get_safety_factor(sigmacr, sigmareal)
         '''finds the needed thickness of the shell to resist column buckling'''
-    def find_shell_buckling_thickness(self):
+    def find_shell_buckling_thickness(self, initial_thickness, margin=np.array([1.0, 1.05])):
         '''finds the needed thickness of the shell to resist shell buckling'''
+        thickness = initial_thickness
+
+        while SF > margin[1] or SF < margin[0]:
+    def get_shell_buckling_critical(self):
+        critical_sigma = k*(1.983 - 0.983 * np.exp(-23.14 * Q))*(((np.pi**2)*self.E_modulus)/12(1-(v**2)))*((t/self.length)**2)
+
 
 # TESTING --------------------------------------------------------
 shell = Shell(length=10, diameter=1, E_modulus=210e9, density=785, initial_thickness=0.1)
