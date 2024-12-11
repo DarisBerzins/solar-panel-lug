@@ -81,7 +81,7 @@ class Shell:
         plt.show()
     def get_safety_factor(self, allowed, real):
         return allowed / real
-    def find_column_buckling_thickness(self, initial_thickness, margin=np.array([1.0, 1.05]), maxit=100):
+    def find_column_buckling_thickness(self, initial_thickness, margin=np.array([1.0, 1.05]), maxit=1000):
         '''finds the needed thickness of the shell to resist column buckling'''
         R = self.diameter/2
         iterthickness = initial_thickness
@@ -97,7 +97,7 @@ class Shell:
                 print('Maximum iteration read')
                 break
         return iterthickness
-    def find_shell_buckling_thickness(self, pressure,initial_thickness, margin=np.array([1.0, 1.05]), maxit=100):
+    def find_shell_buckling_thickness(self, pressure,initial_thickness, margin=np.array([1.0, 1.05]), maxit=1000):
         '''finds the needed thickness of the shell to resist shell buckling'''
         SM = margin[1] + 1
         R = self.diameter / 2
@@ -136,6 +136,14 @@ class Shell:
             massdiff = abs(mass - self.total_mass)
         return self.thickness, thickness_shell, thickness_buckling
 
+    def find_radius_convolution(self, thickness, pressure):
+        CF = 10
+        while CF < 0.99 or CF > 1.01:
+            thickness, thickness_shell, thickness_buckling = self.find_thickness_convolution(thickness, pressure)
+            CF = thickness_shell/thickness_buckling
+            self.diameter = self.diameter/CF
+            print(self.diameter)
+        return self.diameter, thickness
 
 # TESTING --------------------------------------------------------
 shell = Shell(length=10, diameter=2, E_modulus=73.1e9, density=785, initial_thickness=0.1, poisson_ratio=0.33)
@@ -150,4 +158,4 @@ print("Column buckling: ", shell.find_column_buckling_thickness(0.1))
 
 #print("Shell buckling: ", shell.find_shell_buckling_thickness(15000, 0.1))
 #print("Column buckling: ", shell.find_column_buckling_thickness(0.1))
-print("Iterated thickness: ", shell.find_thickness_convolution(0.1, 15000))
+print("Iterated thickness: ", shell.find_radius_convolution(0.1, 15000))
