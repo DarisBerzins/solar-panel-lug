@@ -119,7 +119,7 @@ class Shell:
         Q = (pressure/self.E_modulus)*(((self.diameter/2)/thickness)**2)
         lambda_val = self.find_lambda(thickness)
         k = lambda_val + (12 / np.pi ** 4) * (self.length ** 4 / ((self.diameter/2) ** 2 * thickness ** 2)) * (1 - self.poisson_ratio ** 2) / lambda_val
-        critical_sigma = k*(1.983 - 0.983 * np.exp(-23.14 * Q))*(((np.pi**2)*self.E_modulus)/(12*(1-(self.poisson_ratio**2))))*((thickness/self.length)**2)
+        critical_sigma = k*(1.983 - (0.983 * np.exp(-23.14 * Q)))*(((np.pi**2)*self.E_modulus)/(12*(1-(self.poisson_ratio**2))))*((thickness/self.length)**2)
         return critical_sigma
 
 
@@ -130,3 +130,6 @@ shell.add_mass_position_array([[1000, 2], [1500, 4], [2000, 6], [2500, 8]])
 shell.plot_normal_stress_diagram(resolution=10000)
 print("Shell buckling: ", shell.find_shell_buckling_thickness(15000, 0.1))
 print("Column buckling: ", shell.find_column_buckling_thickness(0.1))
+# pressures =np.arange(1, 1000, 5)
+# for pressure in pressures:
+#     print(shell.get_shell_buckling_critical(1 ,-pressure))
