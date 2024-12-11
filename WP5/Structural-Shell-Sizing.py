@@ -79,27 +79,37 @@ class Shell:
         plt.show()
     def get_safety_factor(self, allowed, real):
         return allowed / real
-    def find_column_buckling_thickness(self, initial_thickness, margin=np.array([1.0, 1.05])):
+    def find_column_buckling_thickness(self, initial_thickness, margin=np.array([1.0, 1.05]), maxit=100):
         '''finds the needed thickness of the shell to resist column buckling'''
         R = self.diameter/2
-        iterthickness = self.thickness
-        SM = margin[1] + 1
+        iterthickness = initial_thickness
+        SM = margin[0] - 0.5
+        i=0
         while SM < margin[0] or SM > margin[1]:
-            sigmacr = (np.power(np.pi, 2)*self.E_modulus*0.5*np.pi*np.power(R, 4)*np.power((R-iterthickness), 4))/(2*np.pi*R*iterthickness)
+            sigmacr = (np.power(np.pi, 2)*self.E_modulus*0.5*np.pi*(np.power(R, 4)-np.power((R-iterthickness), 4)))/(2*np.pi*R*iterthickness)
             sigmareal = self.get_maxload(1000)/(2*np.pi*R*iterthickness)
             SM = self.get_safety_factor(sigmacr, sigmareal)
             iterthickness = iterthickness/SM
+            i+=1
+            if i > maxit:
+                print('Maximum iteration read')
+                break
         return iterthickness
-    def find_shell_buckling_thickness(self, pressure,initial_thickness, margin=np.array([1.0, 1.05])):
+    def find_shell_buckling_thickness(self, pressure,initial_thickness, margin=np.array([1.0, 1.05]), maxit=100):
         '''finds the needed thickness of the shell to resist shell buckling'''
         SM = margin[1] + 1
         R = self.diameter / 2
         iterthickness = initial_thickness
+        i=0
         while SM < margin[0] or SM > margin[1]:
             sigmacr = self.get_shell_buckling_critical(iterthickness, pressure)
             sigmareal = shell.get_maxload(1000)/(2*np.pi*R*iterthickness)
             SM = self.get_safety_factor(sigmacr, sigmareal)
             iterthickness = iterthickness/SM
+            i+=1
+            if i > maxit:
+                print('Maximum iteration read')
+                break
         return iterthickness
 
     def find_lambda(self, thickness):
