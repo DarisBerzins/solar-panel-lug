@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 - Variable thicknesses for different cylinder sections
 - Contrain is not column buckling --> For it to be optimized you need a tiny diameter
 - We size the diameter based on the tank size
+- Also limited by bending stiffness for diameter, AMOI
 '''
 
 '''ASSUMPTIONS:
@@ -83,7 +84,7 @@ class Shell:
         plt.show()
     def get_safety_factor(self, allowed, real):
         return allowed / real
-    def find_column_buckling_thickness(self, initial_thickness, margin=np.array([1.0, 1.05]), maxit=1000):
+    def find_column_buckling_thickness(self, initial_thickness, margin=np.array([1.0, 1.05]), maxit=10000):
         '''finds the needed thickness of the shell to resist column buckling'''
         R = self.diameter/2
         iterthickness = initial_thickness
@@ -99,7 +100,7 @@ class Shell:
                 print('Maximum iteration read')
                 break
         return iterthickness
-    def find_shell_buckling_thickness(self, pressure,initial_thickness, margin=np.array([1.0, 1.05]), maxit=1000):
+    def find_shell_buckling_thickness(self, pressure,initial_thickness, margin=np.array([1.0, 1.05]), maxit=10000):
         '''finds the needed thickness of the shell to resist shell buckling'''
         SM = margin[1] + 1
         R = self.diameter / 2
@@ -146,9 +147,9 @@ class Shell:
             self.diameter = self.diameter/CF
             print(self.diameter)
         return self.diameter, thickness
-    def plot_n_find_thickness_ratio(self, pressure, diameter_range=None, subdivisions=5, initial_thickness=0.001):
+    def plot_n_find_thickness_ratio(self, pressure, diameter_range=None, subdivisions=5, initial_thickness=0.0001):
         if diameter_range is None:
-            diameter_range = np.array([0.09, 1])
+            diameter_range = np.array([0.07, 0.1])
         diameters = np.linspace(diameter_range[0], diameter_range[1], subdivisions)
         thickness_ratios = np.empty_like(diameters)
         i=0
