@@ -168,9 +168,11 @@ class Shell:
 
 
 # TESTING --------------------------------------------------------
-shell = Shell(length=4, diameter=2, E_modulus=73.1e9, density=785, initial_thickness=0.1, poisson_ratio=0.33)
+shell = Shell(length=4, diameter=0.805, E_modulus=73.1e9, density=785, initial_thickness=0.1, poisson_ratio=0.33)
 shell.set_acceleration(9.81*20)
 shell.add_mass_position_array([[100, 2], [150, 4], [200, 6], [250, 8]])
 # shell.plot_normal_stress_diagram(resolution=10000)
-shell.plot_n_find_thickness_ratio(15000)
+#shell.plot_n_find_thickness_ratio(15000)
 # print("Iterated thickness: ", shell.find_radius_convolution(0.1, 15000))
+print(shell.find_thickness_convolution(0.1,50))
+print(shell.find_thickness_convolution(0.1,100))
