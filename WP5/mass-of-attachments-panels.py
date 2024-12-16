@@ -157,3 +157,5 @@ class transversePanelsClass():
 #init class
 #add all the panels with their components
 #add closing panels
+
+#iterate lol
