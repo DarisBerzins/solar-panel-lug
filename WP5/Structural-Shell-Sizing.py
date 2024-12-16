@@ -144,7 +144,6 @@ class Shell:
             self.diameter = self.diameter/CF
             print(self.diameter)
         return self.diameter, thickness
-    
 
 # TESTING --------------------------------------------------------
 shell = Shell(length=10, diameter=0.1, E_modulus=73.1e9, density=785, initial_thickness=0.1, poisson_ratio=0.33)
