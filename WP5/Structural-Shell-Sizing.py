@@ -128,15 +128,15 @@ class Shell:
         return critical_sigma
 
     def find_thickness_convolution(self, thickness, pressure):
-        massdiff = 10
+        weightdiff = 10
         self.thickness = thickness
-        while massdiff >= 0.001:
-            mass = self.total_weight
+        while weightdiff >= 0.0001:
+            weight = self.total_weight
             self.thickness_shell = self.find_shell_buckling_thickness(pressure, self.thickness)
             self.thickness_buckling = self.find_column_buckling_thickness(self.thickness)
             self.thickness = max(self.thickness_shell, self.thickness_buckling)
             self.total_weight = 2 * np.pi * (self.diameter / 2) * self.thickness * self.length * self.density * self.acceleration
-            massdiff = abs(mass - self.total_weight)
+            weightdiff = abs(weight - self.total_weight)
         return self.thickness, self.thickness_shell, self.thickness_buckling
 
     def find_radius_convolution(self, thickness, pressure):
