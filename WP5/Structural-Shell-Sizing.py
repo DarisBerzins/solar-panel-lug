@@ -162,7 +162,7 @@ class Shell:
         plt.plot(diameters, thickness_ratios)
         plt.grid(True)
         plt.show()
-        print("Mass is ", (self.total_weight/self.acceleration), "kg")
+        print("Mass of last element is ", (self.total_weight/self.acceleration), "kg")
 
 
 
