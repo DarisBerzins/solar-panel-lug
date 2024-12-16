@@ -129,12 +129,12 @@ class Shell:
         self.thickness = thickness
         while massdiff >= 0.001:
             mass = self.total_mass
-            thickness_shell = self.find_shell_buckling_thickness(pressure, self.thickness)
-            thickness_buckling = self.find_column_buckling_thickness(self.thickness)
-            self.thickness = max(thickness_shell, thickness_buckling)
+            self.thickness_shell = self.find_shell_buckling_thickness(pressure, self.thickness)
+            self.thickness_buckling = self.find_column_buckling_thickness(self.thickness)
+            self.thickness = max(self.thickness_shell, self.thickness_buckling)
             self.total_mass = 2 * np.pi * (self.diameter / 2) * self.thickness * self.length * self.density * self.acceleration
             massdiff = abs(mass - self.total_mass)
-        return self.thickness, thickness_shell, thickness_buckling
+        return self.thickness, self.thickness_shell, self.thickness_buckling
 
     def find_radius_convolution(self, thickness, pressure):
         CF = 2
