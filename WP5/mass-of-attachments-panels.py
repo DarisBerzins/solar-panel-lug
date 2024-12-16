@@ -54,6 +54,32 @@ def printAttachmentDimensions(ForcePerFastener, material):
     print("Mass: " + str(mass))
     print("Material: " + material[2])
 
+def getAttachmentProperty(ForcePerFastener, material, property):
+    area = ForcePerFastener/material[0]
+    if area < 0.00008: area = 0.00008
+    thickness = np.sqrt(area/20)
+    length = 20 * np.sqrt(area/20)
+    width = length/2
+    volume = 2 * (thickness * length * width) - (thickness * thickness * length)
+    mass = volume * material[1]
+    match property:
+        case "strength": return ForcePerFastener
+        case "area": return area
+        case "thickness": return thickness
+        case "length": return length
+        case "width": return width
+        case "volume": return volume
+        case "mass": return mass
+        case "material": return material
+
+nomex_rho = 48.2  # kg/m^3
+weavefabric_rho = 1611  # kg/m^3
+fabric_t = 0.00019805  # m
+nomex_t = 0.015  # m
+
+def findSandwichMass(area):
+    return  2 * (fabric_t * area) * weavefabric_rho + (nomex_t * area) * nomex_rho
+
 
 lowestMassMMO = 999999999999
 lowestMassNTO = 999999999999
@@ -82,9 +108,40 @@ printAttachmentDimensions(f_NTO/numberOfFastenersNTO, lightestMaterialNTO)
 print(numberOfFastenersNTO)
 print(lowestMassNTO)
 
-class transversePanelClass():
-    def __init__(self):
-        pass
-    #function to add component to transverse panel
-    #function to add attachment points and fasteners in specific locations
-    #function to give mass and stuff
+class transversePanelsClass():
+    def __init__(self, acceleration, sideLength, sideHeight, sideWidth, cylinderDiameter, fastenersPerAttachment):
+        self.acceleration = acceleration
+        self.sideLength = sideLength
+        self.sideHeight = sideHeight
+        self.sideWidth = sideWidth
+        self.cylinderDiameter = cylinderDiameter
+        self.fastenersPerAttachment = fastenersPerAttachment
+        self.panelMasses = []
+        self.attachmentCounts = []#these connect to the central cylindrical shell
+        self.forcesPerAttachment = []
+        self.closingPanelAttachmentCounts = [] #these connect the closing panels to the transverse panels
+        self.attachmentMass = 0
+        self.fastenerMass = 0
+
+    def initPanel(self, componentMasses, attachmentCount): #mass of components plus transverse sandwich panel
+        totalToAdd = sum(componentMasses) + findSandwichMass((self.sideLength * self.sideWidth) - (np.pi * (self.cylinderDiameter / 2) ** 2))
+        self.panelMasses.append(totalToAdd)
+        self.attachmentCounts.append(attachmentCount)
+        
+    def addClosingPanels(self):
+        areaWidthPanel = self.sideWidth * self.sideHeight
+        areaLengthPanel = self.sideLength * self.sideHeight
+        massWidthPanel = findSandwichMass(areaWidthPanel)
+        massLengthPanel = findSandwichMass(areaLengthPanel)
+        panelCount = len(self.panelMasses) + 1
+        for i in range(len(self.panelMasses)):
+            self.panelMasses[i] += (2 * (massWidthPanel + massLengthPanel))/panelCount
+            self.closingPanelAttachmentCounts[i] = 8 #assumes two attachments for each transverse panel
+
+    def findForcesPerAttachment(self, panelNr):
+        totalAttachments = self.attachmentCounts[panelNr] + self.closingPanelAttachmentCounts[panelNr]
+        totalMass = self.panelMasses[panelNr] + totalAttachments * self.attachmentMass + totalAttachments * self.fastenersPerAttachment * self.fastenerMass
+        self.forcesPerAttachment[panelNr] = (totalMass * self.acceleration)/self.attachmentCounts[panelNr]
+
+    
+
