@@ -143,5 +143,11 @@ class transversePanelsClass():
         totalMass = self.panelMasses[panelNr] + totalAttachments * self.attachmentMass + totalAttachments * self.fastenersPerAttachment * self.fastenerMass
         self.forcesPerAttachment[panelNr] = (totalMass * self.acceleration)/self.attachmentCounts[panelNr]
 
-    
+    def designAttachments(self):
+        peakForce = max(self.forcesPerAttachment)
+        self.attachmentMass = getAttachmentProperty(peakForce, lightestMaterialMMO, "mass")
+        self.attachmentScaleFactor = getAttachmentProperty(peakForce, lightestMaterialMMO, "thickness")/0.001
 
+#init class
+#add all the panels with their components
+#add closing panels
