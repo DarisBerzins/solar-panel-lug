@@ -137,18 +137,19 @@ class Shell:
         return self.thickness, thickness_shell, thickness_buckling
 
     def find_radius_convolution(self, thickness, pressure):
-        CF = 10
+        CF = 2
         while CF < 0.99 or CF > 1.01:
             thickness, thickness_shell, thickness_buckling = self.find_thickness_convolution(thickness, pressure)
             CF = thickness_shell/thickness_buckling
             self.diameter = self.diameter/CF
             print(self.diameter)
         return self.diameter, thickness
+    
 
 # TESTING --------------------------------------------------------
-shell = Shell(length=10, diameter=2, E_modulus=73.1e9, density=785, initial_thickness=0.1, poisson_ratio=0.33)
+shell = Shell(length=10, diameter=0.1, E_modulus=73.1e9, density=785, initial_thickness=0.1, poisson_ratio=0.33)
 shell.set_acceleration(9.81*9)
 shell.add_mass_position_array([[1000, 2], [1500, 4], [2000, 6], [2500, 8]])
 shell.plot_normal_stress_diagram(resolution=10000)
 
-print("Iterated thickness: ", shell.find_radius_convolution(0.1, 15000))
+print("Iterated thickness: ", shell.find_radius_convolution(0.01, 15000))
