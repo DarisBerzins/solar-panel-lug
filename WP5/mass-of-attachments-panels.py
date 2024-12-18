@@ -150,13 +150,16 @@ class transversePanelsClass():
         self.attachmentMass = getAttachmentProperty(peakForce, lightestMaterialMMO, "mass")
         self.attachmentScaleFactor = getAttachmentProperty(peakForce, lightestMaterialMMO, "thickness")/0.001
 
-    def checkBearingOK(self):
+    def checkBearingOK(self): #returns false if the part fails
         MaxFastenerInPlaneLoad = max(self.forcesPerAttachment)
         FastenerCriticalBearingStress = lightestMaterialMMO[3]
         bearingStress = MaxFastenerInPlaneLoad/(holeDiameter * self.attachmentScaleFactor * 0.001)
         return bearingStress < FastenerCriticalBearingStress
 
-    def checkPullThroughOK(self):
+    def checkPullThroughOK(self):#returns false if the part fails
+        pass
+    
+    def findForcesOnShell(self):
         pass
 
 #init class
