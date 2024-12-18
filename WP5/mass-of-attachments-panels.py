@@ -12,11 +12,15 @@ launchGForce = 12 # assumed g-force during launch
 
 safetyFactor = 2.5 # safety factor for attachment bracket sizing
 
-materials = [ # yield stress, density, name
-    [215e6, 8000, "304 stainless steel"],
-    [193e6, 2680, "aluminum 5052"],
-    [450e6, 7870, "aisi 1046 steel"]
+materials = [ # yield stress, density, name, bearing strength
+    [215e6, 8000, "304 stainless steel", 215e6],
+    [193e6, 2680, "aluminum 5052", 131e6],
+    [450e6, 7870, "aisi 1046 steel", 450e6]
 ]
+
+holeDiameter = 0.005
+headDiameter = 0.008
+boltDiameter = 0.0045
 
 #====================================================
 #CODE
@@ -148,11 +152,18 @@ class transversePanelsClass():
         self.attachmentMass = getAttachmentProperty(peakForce, lightestMaterialMMO, "mass")
         self.attachmentScaleFactor = getAttachmentProperty(peakForce, lightestMaterialMMO, "thickness")/0.001
 
-    def checkBearing(self):
-        pass
+    def checkBearingOK(self):
+        MaxFastenerInPlaneLoad = max(self.forcesPerAttachment)
+        FastenerCriticalBearingStress = lightestMaterialMMO[3]
+        bearingStress = MaxFastenerInPlaneLoad/(holeDiameter * self.attachmentScaleFactor * 0.001)
+        return bearingStress < FastenerCriticalBearingStress
 
-    def checkPullThrough(self):
-        pass
+    def checkPullThroughOK(self):
+        MaxFastenerOutOfPlaneLoad = max(self.forcesPerAttachment)
+        FastenerCriticalPullThroughStress = lightestMaterialMMO[3]
+        pullThroughArea = (np.pi / 4) * (headDiameter**2 - boltDiameter**2)
+        pullThroughStress = MaxFastenerOutOfPlaneLoad / pullThroughArea
+        return pullThroughStress < FastenerCriticalPullThroughStress
 
 #init class
 #add all the panels with their components
