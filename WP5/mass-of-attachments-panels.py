@@ -19,6 +19,8 @@ materials = [ # yield stress, density, name, bearing strength
 ]
 
 holeDiameter = 0.005
+headDiameter = 0.008
+boltDiameter = 0.0045
 
 #====================================================
 #CODE
@@ -157,7 +159,11 @@ class transversePanelsClass():
         return bearingStress < FastenerCriticalBearingStress
 
     def checkPullThroughOK(self):
-        pass
+        MaxFastenerOutOfPlaneLoad = max(self.forcesPerAttachment)
+        FastenerCriticalPullThroughStress = lightestMaterialMMO[3]
+        pullThroughArea = (np.pi / 4) * (headDiameter**2 - boltDiameter**2)
+        pullThroughStress = MaxFastenerOutOfPlaneLoad / pullThroughArea
+        return pullThroughStress < FastenerCriticalPullThroughStress
 
 #init class
 #add all the panels with their components
