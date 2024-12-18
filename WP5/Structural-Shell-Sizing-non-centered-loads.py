@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 - Also limited by bending stiffness for diameter, AMOI
 - Argue that using the max compression is not reasonable since buckling assumes constant force distribution and is geometry dependent --> Cannot be applied to a point
 - Hopefully argue that the moment tension/compression is sufficiently small to be included within the safety factor
+- Say that we can pressurize it such that we control tension. Pressurized during launch and vented when in zero G
 '''
 
 '''ASSUMPTIONS:
@@ -189,7 +190,9 @@ class Shell:
         plt.grid(True)
         plt.show()
         print("Mass of last element is ", (self.total_weight/self.acceleration), "kg")
-
+    def compare_weight_n_bending_tensions(self):
+        R=self.diameter/2
+        weight_tension = self.total_weight/(2*np.pi*R*self.thickness)
 
 
 
