@@ -12,10 +12,10 @@ launchGForce = 12 # assumed g-force during launch
 
 safetyFactor = 2.5 # safety factor for attachment bracket sizing
 
-materials = [ # yield stress, density, name, bearing strength
-    [215e6, 8000, "304 stainless steel", 215e6],
-    [193e6, 2680, "aluminum 5052", 131e6],
-    [450e6, 7870, "aisi 1046 steel", 450e6]
+materials = [ # yield stress, density, name, bearing strength, shear yield strength
+    [215e6, 8000, "304 stainless steel", 215e6, 386e6],
+    [193e6, 2680, "aluminum 5052", 131e6, 124e6],
+    [450e6, 7870, "aisi 1046 steel", 450e6, 430e6]
 ]
 
 holeDiameter = 0.005
@@ -160,7 +160,7 @@ class transversePanelsClass():
 
     def checkPullThroughOK(self):#returns false if the part fails
         MaxFastenerOutOfPlaneLoad = max(self.forcesPerAttachment)
-        FastenerCriticalPullThroughStress = lightestMaterialMMO[3]
+        FastenerCriticalPullThroughStress = lightestMaterialMMO[4]
         pullThroughArea = (np.pi / 4) * (headDiameter**2 - boltDiameter**2)
         pullThroughStress = MaxFastenerOutOfPlaneLoad / pullThroughArea
         return pullThroughStress < FastenerCriticalPullThroughStress
