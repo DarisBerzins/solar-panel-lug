@@ -172,4 +172,65 @@ class transversePanelsClass():
 #add all the panels with their components
 #add closing panels
 
+
+panel_properties = {
+    'acceleration': launchGForce * 9.81,
+    'sideLength': 1.400,
+    'sideHeight': 0.0153961,
+    'sideWidth': 0.830,
+    'cylinderDiameter': 0.805,
+    'fastenersPerAttachment': 4
+}
+
+all_components = [  # STILL ADD SOME MASSES
+    [
+        {'name': 'nothing', 'mass': 0.0},
+    ],
+    [
+        {'name': 'Power Distribution Unit', 'mass': 1},
+        {'name': 'Battery', 'mass': 5.9},
+        {'name': 'IMU', 'mass': 6.85},
+        {'name': 'HRSC camera', 'mass': 11.8},
+        {'name': 'HRSC electronics', 'mass': 7.2},
+        {'name': 'Star Sensor', 'mass': 0.0},
+    ],
+    [
+        {'name': 'RGL module', 'mass': 0.0},
+        {'name': 'Wheel Drive Electronics', 'mass': 4.67},
+        {'name': 'Reaction Wheels', 'mass': 0.0},
+        {'name': 'Altimeter', 'mass': 13},
+        {'name': 'UV Spectrometer', 'mass': 14.5},
+        {'name': 'UVS Electronics', 'mass': 7},
+        {'name': 'Star Sensor', 'mass': 0.0},
+    ],
+    [
+        {'name': 'Magnetometer Boom', 'mass': 0.0},
+        {'name': 'Magelectronics', 'mass': 12},
+        {'name': 'Helium Tank', 'mass': 233.54},
+        {'name': 'Star Sensor', 'mass': 0.0},
+        {'name': '4 Thrusters', 'mass': 0.0},
+        {'name': 'Solar Panels', 'mass': 0.0},
+    ],
+]
+
+panels = []
+for i, components in enumerate(all_components):
+    panel = transversePanelsClass(
+        acceleration=panel_properties['acceleration'],
+        sideLength=panel_properties['sideLength'],
+        sideHeight=panel_properties['sideHeight'],
+        sideWidth=panel_properties['sideWidth'],
+        cylinderDiameter=panel_properties['cylinderDiameter'],
+        fastenersPerAttachment=panel_properties['fastenersPerAttachment']
+    )
+    panels.append(panel)
+
+    panel.initPanel([comp['mass'] for comp in components], attachmentCount=10)
+
+    panel.addClosingPanels()
+    panel.findForcesPerAttachment(panelNr=0)
+    panel.designAttachments()
+
+    # still do bearing and pull through checks
+
 #iterate lol
