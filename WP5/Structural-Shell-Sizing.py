@@ -173,12 +173,12 @@ class Shell:
 
 # TESTING --------------------------------------------------------
 shell = Shell(length=2.675, diameter=0.805, E_modulus=30e9, density=1400, initial_thickness=0.1, poisson_ratio=0.34)
-shell.set_acceleration(9.81*12) # Safety factor of two over the 6 g acc
+shell.set_acceleration(9.81*6) # Safety factor of two over the 6 g acc
 shell.add_mass_position_array([[62.172, .725], [35.026, .725+.934], [4.859, .725+.934+1.007]])
 # print(shell.find_thickness_convolution(0.1,101325*1))
-print(shell.find_thickness_convolution(0.001,2))
-
-shell.plot_normal_stress_diagram(resolution=10000)
+# print(shell.find_thickness_convolution(0.001,2))
+shell.thickness = 0.001218882643896772
+shell.plot_normal_stress_diagram(resolution=100000)
 #shell.plot_n_find_thickness_ratio(15000)
 # print("Iterated thickness: ", shell.find_radius_convolution(0.1, 15000))
 # print(shell.find_thickness_convolution(0.1,50))
