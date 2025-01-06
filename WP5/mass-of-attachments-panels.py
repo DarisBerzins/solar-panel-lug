@@ -192,23 +192,23 @@ all_components = [  # STILL ADD SOME MASSES
         {'name': 'IMU', 'mass': 6.85},
         {'name': 'HRSC camera', 'mass': 11.8},
         {'name': 'HRSC electronics', 'mass': 7.2},
-        {'name': 'Star Sensor', 'mass': 0.0},
+        {'name': 'Star Sensor', 'mass': 0.470},
     ],
     [
-        {'name': 'RGL module', 'mass': 0.0},
+        {'name': 'RLG module', 'mass': 1.816},
         {'name': 'Wheel Drive Electronics', 'mass': 4.67},
-        {'name': 'Reaction Wheels', 'mass': 0.0},
+        {'name': 'Reaction Wheels', 'mass': 24.08},
         {'name': 'Altimeter', 'mass': 13},
         {'name': 'UV Spectrometer', 'mass': 14.5},
         {'name': 'UVS Electronics', 'mass': 7},
-        {'name': 'Star Sensor', 'mass': 0.0},
+        {'name': 'Star Sensor', 'mass': 0.470},
     ],
     [
         {'name': 'Magnetometer Boom', 'mass': 0.0},
         {'name': 'Magelectronics', 'mass': 12},
         {'name': 'Helium Tank', 'mass': 233.54},
-        {'name': 'Star Sensor', 'mass': 0.0},
-        {'name': '4 Thrusters', 'mass': 0.0},
+        {'name': 'Star Sensor', 'mass': 0.470},
+        {'name': '4 Thrusters', 'mass': 1.4},
         {'name': 'Solar Panels', 'mass': 0.0},
     ],
 ]
@@ -231,6 +231,16 @@ for i, components in enumerate(all_components):
     panel.findForcesPerAttachment(panelNr=0)
     panel.designAttachments()
 
-    # still do bearing and pull through checks
+    print(f"Panel {i + 1}:")
+    if not panel.checkBearingOK():
+        print("Bearing stress exceeds limit")
+    else:
+        print("Bearing stress is within limit")
+
+    if not panel.checkPullThroughOK():
+        print("Pull-through stress exceeds limit")
+    else:
+        print("Pull-through stress is within limit")
+
 
 #iterate lol
