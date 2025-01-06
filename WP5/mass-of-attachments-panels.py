@@ -12,10 +12,10 @@ launchGForce = 12 # assumed g-force during launch
 
 safetyFactor = 2.5 # safety factor for attachment bracket sizing
 
-materials = [ # yield stress, density, name, bearing strength
-    [215e6, 8000, "304 stainless steel", 215e6],
-    [193e6, 2680, "aluminum 5052", 131e6],
-    [450e6, 7870, "aisi 1046 steel", 450e6]
+materials = [ # yield stress, density, name, bearing strength, shear yield strength
+    [215e6, 8000, "304 stainless steel", 215e6, 386e6],
+    [193e6, 2680, "aluminum 5052", 131e6, 124e6],
+    [450e6, 7870, "aisi 1046 steel", 450e6, 430e6]
 ]
 
 holeDiameter = 0.005
@@ -152,21 +152,95 @@ class transversePanelsClass():
         self.attachmentMass = getAttachmentProperty(peakForce, lightestMaterialMMO, "mass")
         self.attachmentScaleFactor = getAttachmentProperty(peakForce, lightestMaterialMMO, "thickness")/0.001
 
-    def checkBearingOK(self):
+    def checkBearingOK(self): #returns false if the part fails
         MaxFastenerInPlaneLoad = max(self.forcesPerAttachment)
         FastenerCriticalBearingStress = lightestMaterialMMO[3]
         bearingStress = MaxFastenerInPlaneLoad/(holeDiameter * self.attachmentScaleFactor * 0.001)
         return bearingStress < FastenerCriticalBearingStress
 
-    def checkPullThroughOK(self):
+    def checkPullThroughOK(self):#returns false if the part fails
         MaxFastenerOutOfPlaneLoad = max(self.forcesPerAttachment)
-        FastenerCriticalPullThroughStress = lightestMaterialMMO[3]
+        FastenerCriticalPullThroughStress = lightestMaterialMMO[4]
         pullThroughArea = (np.pi / 4) * (headDiameter**2 - boltDiameter**2)
         pullThroughStress = MaxFastenerOutOfPlaneLoad / pullThroughArea
         return pullThroughStress < FastenerCriticalPullThroughStress
+    
+    def findForcesOnShell(self):
+        pass
 
 #init class
 #add all the panels with their components
 #add closing panels
+
+
+panel_properties = {
+    'acceleration': launchGForce * 9.81,
+    'sideLength': 1.400,
+    'sideHeight': 0.0153961,
+    'sideWidth': 0.830,
+    'cylinderDiameter': 0.805,
+    'fastenersPerAttachment': 4
+}
+
+all_components = [  # STILL ADD SOME MASSES
+    [
+        {'name': 'nothing', 'mass': 0.0},
+    ],
+    [
+        {'name': 'Power Distribution Unit', 'mass': 1},
+        {'name': 'Battery', 'mass': 5.9},
+        {'name': 'IMU', 'mass': 6.85},
+        {'name': 'HRSC camera', 'mass': 11.8},
+        {'name': 'HRSC electronics', 'mass': 7.2},
+        {'name': 'Star Sensor', 'mass': 0.470},
+    ],
+    [
+        {'name': 'RLG module', 'mass': 1.816},
+        {'name': 'Wheel Drive Electronics', 'mass': 4.67},
+        {'name': 'Reaction Wheels', 'mass': 24.08},
+        {'name': 'Altimeter', 'mass': 13},
+        {'name': 'UV Spectrometer', 'mass': 14.5},
+        {'name': 'UVS Electronics', 'mass': 7},
+        {'name': 'Star Sensor', 'mass': 0.470},
+    ],
+    [
+        {'name': 'Magnetometer Boom', 'mass': 30},
+        {'name': 'Magelectronics', 'mass': 12},
+        {'name': 'Helium Tank', 'mass': 233.54},
+        {'name': 'Star Sensor', 'mass': 0.470},
+        {'name': '4 Thrusters', 'mass': 1.4},
+        {'name': 'Solar Panels', 'mass': 18.06},
+    ],
+]
+
+panels = []
+for i, components in enumerate(all_components):
+    panel = transversePanelsClass(
+        acceleration=panel_properties['acceleration'],
+        sideLength=panel_properties['sideLength'],
+        sideHeight=panel_properties['sideHeight'],
+        sideWidth=panel_properties['sideWidth'],
+        cylinderDiameter=panel_properties['cylinderDiameter'],
+        fastenersPerAttachment=panel_properties['fastenersPerAttachment']
+    )
+    panels.append(panel)
+
+    panel.initPanel([comp['mass'] for comp in components], attachmentCount=10)
+
+    panel.addClosingPanels()
+    panel.findForcesPerAttachment(panelNr=0)
+    panel.designAttachments()
+
+    print(f"Panel {i + 1}:")
+    if not panel.checkBearingOK():
+        print("Bearing stress exceeds limit")
+    else:
+        print("Bearing stress is within limit")
+
+    if not panel.checkPullThroughOK():
+        print("Pull-through stress exceeds limit")
+    else:
+        print("Pull-through stress is within limit")
+
 
 #iterate lol
