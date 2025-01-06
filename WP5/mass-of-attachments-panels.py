@@ -204,12 +204,12 @@ all_components = [  # STILL ADD SOME MASSES
         {'name': 'Star Sensor', 'mass': 0.470},
     ],
     [
-        {'name': 'Magnetometer Boom', 'mass': 0.0},
+        {'name': 'Magnetometer Boom', 'mass': 30},
         {'name': 'Magelectronics', 'mass': 12},
         {'name': 'Helium Tank', 'mass': 233.54},
         {'name': 'Star Sensor', 'mass': 0.470},
         {'name': '4 Thrusters', 'mass': 1.4},
-        {'name': 'Solar Panels', 'mass': 0.0},
+        {'name': 'Solar Panels', 'mass': 18.06},
     ],
 ]
 
