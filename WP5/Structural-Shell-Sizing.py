@@ -13,6 +13,10 @@ import matplotlib.pyplot as plt
 - Shell is thin walled
 - Constant thickness
 - Only loads considered are point load masses and shell distributed weight mass
+- Area of the sandwich pannels is width*width - the area of a hole with the diameter of the tanks:
+  worst case scenario as we assume the hole is smaller than what it really is (thickness is not 0)
+- Lateral panels are either really lightweight or self supported
+- tanks are structural. They carry themselves and the antenna.
 '''
 
 class Shell:
@@ -168,11 +172,14 @@ class Shell:
 
 
 # TESTING --------------------------------------------------------
-shell = Shell(length=4, diameter=0.805, E_modulus=73.1e9, density=785, initial_thickness=0.1, poisson_ratio=0.33)
-shell.set_acceleration(9.81*20)
-shell.add_mass_position_array([[100, 2], [150, 4], [200, 6], [250, 8]])
-# shell.plot_normal_stress_diagram(resolution=10000)
+shell = Shell(length=2.675, diameter=0.805, E_modulus=30e9, density=1400, initial_thickness=0.1, poisson_ratio=0.34)
+shell.set_acceleration(9.81*12) # Safety factor of two over the 6 g acc
+shell.add_mass_position_array([[62.172, .725], [35.026, .725+.934], [4.859, .725+.934+1.007]])
+# print(shell.find_thickness_convolution(0.1,101325*1))
+print(shell.find_thickness_convolution(0.001,2))
+
+shell.plot_normal_stress_diagram(resolution=10000)
 #shell.plot_n_find_thickness_ratio(15000)
 # print("Iterated thickness: ", shell.find_radius_convolution(0.1, 15000))
-print(shell.find_thickness_convolution(0.1,50))
-print(shell.find_thickness_convolution(0.1,100))
+# print(shell.find_thickness_convolution(0.1,50))
+# print(shell.find_thickness_convolution(0.1,101325*2))
