@@ -121,7 +121,7 @@ class transversePanelsClass():
         self.cylinderDiameter = cylinderDiameter
         self.fastenersPerAttachment = fastenersPerAttachment
         self.panelMasses = []
-        self.attachmentCounts = []#these connect to the central cylindrical shell
+        self.attachmentCounts = [] #these connect to the central cylindrical shell
         self.forcesPerAttachment = []
         self.closingPanelAttachmentCounts = [] #these connect the closing panels to the transverse panels
         self.attachmentMass = 0
@@ -131,6 +131,8 @@ class transversePanelsClass():
         totalToAdd = sum(componentMasses) + findSandwichMass((self.sideLength * self.sideWidth) - (np.pi * (self.cylinderDiameter / 2) ** 2))
         self.panelMasses.append(totalToAdd)
         self.attachmentCounts.append(attachmentCount)
+        self.closingPanelAttachmentCounts.append(0)
+        self.forcesPerAttachment.append(0)
         
     def addClosingPanels(self):
         areaWidthPanel = self.sideWidth * self.sideHeight
@@ -140,9 +142,13 @@ class transversePanelsClass():
         panelCount = len(self.panelMasses) + 1
         for i in range(len(self.panelMasses)):
             self.panelMasses[i] += (2 * (massWidthPanel + massLengthPanel))/panelCount
+            if len(self.closingPanelAttachmentCounts) <= i:  # it was giving an error so fixed it like this
+                self.closingPanelAttachmentCounts.append(0)
             self.closingPanelAttachmentCounts[i] = 8 #assumes two attachments for each transverse panel
 
     def findForcesPerAttachment(self, panelNr):
+        while len(self.forcesPerAttachment) <= panelNr:  # same as with closing panels, got an error
+            self.forcesPerAttachment.append(0)
         totalAttachments = self.attachmentCounts[panelNr] + self.closingPanelAttachmentCounts[panelNr]
         totalMass = self.panelMasses[panelNr] + totalAttachments * self.attachmentMass + totalAttachments * self.fastenersPerAttachment * self.fastenerMass
         self.forcesPerAttachment[panelNr] = (totalMass * self.acceleration)/self.attachmentCounts[panelNr]
@@ -241,6 +247,3 @@ for i, components in enumerate(all_components):
         print("Pull-through stress exceeds limit")
     else:
         print("Pull-through stress is within limit")
-
-
-#iterate lol
