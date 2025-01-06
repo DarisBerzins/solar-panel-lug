@@ -247,3 +247,6 @@ for i, components in enumerate(all_components):
         print("Pull-through stress exceeds limit")
     else:
         print("Pull-through stress is within limit")
+
+
+# first three panels work with 4 attachments, fourth panel fails the bearing stress
