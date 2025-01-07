@@ -172,7 +172,69 @@ class transversePanelsClass():
         return pullThroughStress < FastenerCriticalPullThroughStress
     
     def findForcesOnShell(self):
-        pass
+        """
+        Calculate resultant forces on the main cylindrical shell (Bx, By, Bz)
+        based on attachment forces and inertial forces.
+        """
+        g = 9.81  # Gravitational acceleration in m/s^2
+        results = []
+        
+        for ax_g in range(0, 13, 0.1):  # Loop for a_x
+            for ay_g in range(0, 13, 0.1):  # Loop for a_y
+                for az_g in range(0, 13, 0.1):  # Loop for a_z
+                    # Convert g to m/s^2
+                    ax, ay, az = ax_g * g, ay_g * g, az_g * g
+        
+                    # Initialize total forces to zero
+                    Bx, By, Bz = 0, 0, 0
+        
+                    # Iterate through attachments
+                    for attachment_idx in range(len(self.attachmentCounts)):
+                        # Forces transmitted by the attachments
+                        Fx = self.forcesPerAttachment[attachment_idx]
+                        Fy = self.forcesPerAttachment[attachment_idx]
+                        Fz = self.forcesPerAttachment[attachment_idx]
+        
+                        # Inertial forces of the attachment
+                        inertial_force_x = self.attachmentMass * ax
+                        inertial_force_y = self.attachmentMass * ay
+                        inertial_force_z = self.attachmentMass * az
+        
+                        # Calculate resultant forces on the cylindrical shell
+                        Bx += Fx + inertial_force_x
+                        By += Fy + inertial_force_y
+                        Bz += Fz + inertial_force_z
+        
+                    # Store the results for this acceleration combination
+                    results.append({'Bx': Bx, 'By': By, 'Bz': Bz})
+                    print(f"Resultant Forces on Shell: Bx={Bx:.2f} N, By={By:.2f} N, Bz={Bz:.2f} N")
+        
+        return results
+        """
+        # Initialize total forces to zero
+        Bx, By, Bz = 0, 0, 0
+    
+        # Iterate through attachments
+        for attachment_idx in range(len(self.attachmentCounts)):
+            # Forces transmitted by the attachments
+            Fx = self.forcesPerAttachment[attachment_idx]  # Force in X direction
+            Fy = self.forcesPerAttachment[attachment_idx]  # Force in Y direction
+            Fz = self.forcesPerAttachment[attachment_idx]  # Force in Z direction
+    
+            # Inertial forces of the attachment
+            ax, ay, az = 12 * 9.81, 0, 12 * 9.81  # Example accelerations during launch
+            inertial_force_x = self.attachmentMass * ax
+            inertial_force_y = self.attachmentMass * ay
+            inertial_force_z = self.attachmentMass * az
+    
+            # Calculate resultant forces on the cylindrical shell
+            Bx += Fx + inertial_force_x
+            By += Fy + inertial_force_y
+            Bz += Fz + inertial_force_z
+    
+        print(f"Resultant Forces on Shell: Bx={Bx:.2f} N, By={By:.2f} N, Bz={Bz:.2f} N")
+        return Bx, By, Bz
+        """
 
 #init class
 #add all the panels with their components
