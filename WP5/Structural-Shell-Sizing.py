@@ -173,13 +173,16 @@ class Shell:
 
 # TESTING --------------------------------------------------------
 shell = Shell(length=2.675, diameter=0.805, E_modulus=30e9, density=1400, initial_thickness=0.1, poisson_ratio=0.34)
-shell.set_acceleration(9.81*6) # Safety factor of two over the 6 g acc
+shell.set_acceleration(9.81*12) # Safety factor of two over the 6 g acc
 shell.add_mass_position_array([[62.172, .725], [35.026, .725+.934], [4.859, .725+.934+1.007]])
 # print(shell.find_thickness_convolution(0.1,101325*1))
 # print(shell.find_thickness_convolution(0.001,2))
-shell.thickness = 0.001218882643896772
+shell.thickness = 0.001218882643896772 # Non pressurized required thickness
+shell.thickness = 0.0006529768384804942 # pressurized required thickness
 shell.plot_normal_stress_diagram(resolution=100000)
+# print("Mass of last element is ", (shell.total_weight/shell.acceleration), "kg")
+print("Mass of last element is ", 2 * np.pi * (shell.diameter / 2) * shell.thickness * shell.length * shell.density, "kg")
 #shell.plot_n_find_thickness_ratio(15000)
 # print("Iterated thickness: ", shell.find_radius_convolution(0.1, 15000))
-# print(shell.find_thickness_convolution(0.1,50))
-# print(shell.find_thickness_convolution(0.1,101325*2))
+print(shell.find_thickness_convolution(0.1,50))
+print(shell.find_thickness_convolution(0.1,101325*0.2))
