@@ -8,9 +8,9 @@ m_MMO = 247.54 # mass of hydrazine propellant
 
 m_tank = 17.5 # mass of each propellant tank
 
-launchGForce = 12 # assumed g-force during launch
+launchGForce = 6 # assumed g-force during launch
 
-safetyFactor = 2.5 # safety factor for attachment bracket sizing
+safetyFactor = 2 # safety factor for attachment bracket sizing
 
 materials = [ # yield stress, density, name, bearing strength, shear yield strength
     [215e6, 8000, "304 stainless steel", 215e6, 386e6],
@@ -176,56 +176,59 @@ class transversePanelsClass():
         Calculate resultant forces on the main cylindrical shell (Bx, By, Bz)
         based on attachment forces and inertial forces.
         """
-        g = 9.81  # Gravitational acceleration in m/s^2
-        results = []
+        # g = 9.81  # Gravitational acceleration in m/s^2
+        # results = []
         
-        for ax_g in range(0, 13, 0.1):  # Loop for a_x
-            for ay_g in range(0, 13, 0.1):  # Loop for a_y
-                for az_g in range(0, 13, 0.1):  # Loop for a_z
-                    # Convert g to m/s^2
-                    ax, ay, az = ax_g * g, ay_g * g, az_g * g
+        # for ax_g in range(0, 13, 0.1):  # Loop for a_x
+        #     for ay_g in range(0, 13, 0.1):  # Loop for a_y
+        #         for az_g in range(0, 13, 0.1):  # Loop for a_z
+        #             # Convert g to m/s^2
+        #             ax, ay, az = ax_g * g, ay_g * g, az_g * g
         
-                    # Initialize total forces to zero
-                    Bx, By, Bz = 0, 0, 0
+        #             # Initialize total forces to zero
+        #             Bx, By, Bz = 0, 0, 0
         
-                    # Iterate through attachments
-                    for attachment_idx in range(len(self.attachmentCounts)):
-                        # Forces transmitted by the attachments
-                        Fx = self.forcesPerAttachment[attachment_idx]
-                        Fy = self.forcesPerAttachment[attachment_idx]
-                        Fz = self.forcesPerAttachment[attachment_idx]
+        #             # Iterate through attachments
+        #             for attachment_idx in range(len(self.attachmentCounts)):
+        #                 # Forces transmitted by the attachments
+        #                 Fx = self.forcesPerAttachment[attachment_idx]
+        #                 Fy = self.forcesPerAttachment[attachment_idx]
+        #                 Fz = self.forcesPerAttachment[attachment_idx]
         
-                        # Inertial forces of the attachment
-                        inertial_force_x = self.attachmentMass * ax
-                        inertial_force_y = self.attachmentMass * ay
-                        inertial_force_z = self.attachmentMass * az
+        #                 # Inertial forces of the attachment
+        #                 inertial_force_x = self.attachmentMass * ax
+        #                 inertial_force_y = self.attachmentMass * ay
+        #                 inertial_force_z = self.attachmentMass * az
         
-                        # Calculate resultant forces on the cylindrical shell
-                        Bx += Fx + inertial_force_x
-                        By += Fy + inertial_force_y
-                        Bz += Fz + inertial_force_z
+        #                 # Calculate resultant forces on the cylindrical shell
+        #                 Bx += Fx + inertial_force_x
+        #                 By += Fy + inertial_force_y
+        #                 Bz += Fz + inertial_force_z
         
-                    # Store the results for this acceleration combination
-                    results.append({'Bx': Bx, 'By': By, 'Bz': Bz})
-                    print(f"Resultant Forces on Shell: Bx={Bx:.2f} N, By={By:.2f} N, Bz={Bz:.2f} N")
+        #             # Store the results for this acceleration combination
+        #             results.append({'Bx': Bx, 'By': By, 'Bz': Bz})
+        #             print(f"Resultant Forces on Shell: Bx={Bx:.2f} N, By={By:.2f} N, Bz={Bz:.2f} N")
         
-        return results
-        """
+        # return results
+        
         # Initialize total forces to zero
         Bx, By, Bz = 0, 0, 0
     
         # Iterate through attachments
         for attachment_idx in range(len(self.attachmentCounts)):
-            # Forces transmitted by the attachments
-            Fx = self.forcesPerAttachment[attachment_idx]  # Force in X direction
-            Fy = self.forcesPerAttachment[attachment_idx]  # Force in Y direction
-            Fz = self.forcesPerAttachment[attachment_idx]  # Force in Z direction
+            # forces except for attachments
+
+            ax, ay, az = 2 * safetyFactor * 9.81, 2 * safetyFactor * 9.81, launchGForce * safetyFactor * 9.81  # accelerations during launch
+
+            Fx = self.panelMasses[attachment_idx] * ax # Force in X direction
+            Fy = self.panelMasses[attachment_idx] * ay # Force in Y direction
+            Fz = self.panelMasses[attachment_idx] * az # Force in Z direction
     
             # Inertial forces of the attachment
-            ax, ay, az = 12 * 9.81, 0, 12 * 9.81  # Example accelerations during launch
-            inertial_force_x = self.attachmentMass * ax
-            inertial_force_y = self.attachmentMass * ay
-            inertial_force_z = self.attachmentMass * az
+           
+            inertial_force_x = self.attachmentMass * ax * self.attachmentCounts[attachment_idx]
+            inertial_force_y = self.attachmentMass * ay * self.attachmentCounts[attachment_idx]
+            inertial_force_z = self.attachmentMass * az * self.attachmentCounts[attachment_idx]
     
             # Calculate resultant forces on the cylindrical shell
             Bx += Fx + inertial_force_x
@@ -234,7 +237,7 @@ class transversePanelsClass():
     
         print(f"Resultant Forces on Shell: Bx={Bx:.2f} N, By={By:.2f} N, Bz={Bz:.2f} N")
         return Bx, By, Bz
-        """
+        
 
 #init class
 #add all the panels with their components
@@ -310,5 +313,7 @@ for i, components in enumerate(all_components):
     else:
         print("Pull-through stress is within limit")
 
+for panel in panels:
+    panel.findForcesOnShell()
 
 # first three panels work with 4 attachments, fourth panel fails the bearing stress
